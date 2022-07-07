@@ -1,30 +1,43 @@
 package ru.cft.yellowrubberduck.controller;
 
-import com.fasterxml.jackson.databind.deser.std.MapEntryDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.yellowrubberduck.model.Security;
+import ru.cft.yellowrubberduck.model.User;
+import ru.cft.yellowrubberduck.repos.GeneralUsersRepos;
+import ru.cft.yellowrubberduck.repos.TemproraryUsersRepos;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("message")
+@RequestMapping("/login")
 public class MessageController {
-    int counter = 0;
-    public HashMap<Integer, String[]> dataBase = new HashMap<>();
+    MessageController(){}
 
-    @GetMapping("{id}")
-    public String[] list(@PathVariable int id){
-        return dataBase.get(id);
-    }
+    @Autowired
+    private GeneralUsersRepos usersRepos;
+    @Autowired
+    private TemproraryUsersRepos temproraryUsersRepos;
 
     @GetMapping
-    public HashMap<Integer, String[]> getDataBase(){
-        return dataBase;
+    public UUID getUserId(Security security){
+
+        usersRepos.;
     }
 
     @PostMapping
-    public void addUser(@RequestBody Security securityData){
+    public UUID newUserRegistration(Security security, User user){
+        temproraryUsersRepos.save(user);
+    }
 
-        dataBase.put(counter++, new String[]{securityData.password, securityData.email});
+    @PutMapping
+    public UUID checkingAccountValidation(){
+
+    }
+
+    @DeleteMapping
+    public boolean userDelete(@RequestBody User user){
+        usersRepos.delete(user);
+        return true;
     }
 }
