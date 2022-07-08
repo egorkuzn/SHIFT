@@ -8,15 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import java.io.Serializable;
-
 import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role implements Serializable {
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;

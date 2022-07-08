@@ -1,14 +1,14 @@
 package ru.cft.clorental.service;
 
-import ru.cft.clorental.domain.Role;
-import ru.cft.clorental.domain.User;
+import ru.cft.clorental.domain.RoleEntity;
+import ru.cft.clorental.domain.UserEntity;
 
 import java.util.List;
 
 public interface UserService {
-    User saveUser(User user);
-    Role saveRole(Role role);
+    UserEntity saveUser(UserEntity user);
+    RoleEntity saveRole(RoleEntity role);
     void addRoleToUser(String username, String roleName);
-    User getUser(String username);
-    List<User> getUsers();
+    UserEntity getUser(String username);
+    List<UserEntity> getUsers();
 }

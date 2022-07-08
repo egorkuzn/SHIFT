@@ -2,14 +2,14 @@ package ru.cft.clorental.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.domain.Role;
-import ru.cft.clorental.domain.User;
+import ru.cft.clorental.domain.UserEntity;
+import ru.cft.clorental.domain.RoleEntity;
 import ru.cft.clorental.repos.RoleRepo;
 import ru.cft.clorental.repos.UserRepo;
 
@@ -23,19 +23,19 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    private RoleRepo roleRepo;
+    private final UserRepo userRepo;
+    private final RoleRepo roleRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User saveUser(User user) {
+    public UserEntity saveUser(UserEntity user) {
         log.info("Saving new user {} to the database", user.getName());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
 
     @Override
-    public Role saveRole(Role role) {
+    public RoleEntity saveRole(RoleEntity role) {
         log.info("Saving new role {} to the database", role.getName());
         return roleRepo.save(role);
     }
@@ -43,32 +43,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
-        User user = userRepo.findByUsername(username);
-        Role role = roleRepo.findByName(roleName);
+        UserEntity user = userRepo.findByUsername(username);
+        RoleEntity role = roleRepo.findByName(roleName);
         user.getRoles().add(role);
     }
 
     @Override
-    public User getUser(String username) {
+    public UserEntity getUser(String username) {
         log.info("Fetching user {}", username);
         return userRepo.findByUsername(username);
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserEntity> getUsers() {
         log.info("Fetching all users");
         return userRepo.findAll();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
+        UserEntity user = userRepo.findByUsername(username);
 
         if(user == null) {
-            log.error("User not found in the database");
-            throw new UsernameNotFoundException("User not found in the database");
+            log.error("UserEntity not found in the database");
+            throw new UsernameNotFoundException("UserEntity not found in the database");
         } else
-            log.info("User found in the database{}", username);
+            log.info("UserEntity found in the database{}", username);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> {
