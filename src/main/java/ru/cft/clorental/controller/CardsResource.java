@@ -1,8 +1,8 @@
-package ru.cft.clorental.api;
+package ru.cft.clorental.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.domain.CardEntity;
+import ru.cft.clorental.model.CardEntity;
 import ru.cft.clorental.repos.CardsRepo;
 
 @RestController

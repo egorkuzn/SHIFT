@@ -1,7 +1,7 @@
 package ru.cft.clorental.repos;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.cft.clorental.domain.CardEntity;
+import ru.cft.clorental.model.CardEntity;
 
 import java.util.List;
 

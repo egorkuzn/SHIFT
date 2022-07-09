@@ -1,4 +1,4 @@
-package ru.cft.clorental.domain;
+package ru.cft.clorental.model;
 
 import org.springframework.data.annotation.Id;
 

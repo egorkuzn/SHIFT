@@ -1,4 +1,4 @@
-package ru.cft.clorental.domain;
+package history.security;
 
 import lombok.Data;
 

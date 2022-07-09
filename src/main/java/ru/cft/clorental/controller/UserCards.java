@@ -1,11 +1,11 @@
-package ru.cft.clorental.api;
+package ru.cft.clorental.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.domain.CardChangeCommand;
-import ru.cft.clorental.domain.CardEntity;
-import ru.cft.clorental.domain.RequestForGettingCardsOfOneType;
+import ru.cft.clorental.model.CardChangeCommand;
+import ru.cft.clorental.model.CardEntity;
+import ru.cft.clorental.model.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.repos.CardsRepo;
 
 import java.sql.Date;
@@ -15,11 +15,11 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/me")
-public class MeResource {
+@RequestMapping("/me/cards")
+public class UserCards {
     CardsRepo cardsRepo;
 
-    @GetMapping("/cards")
+    @GetMapping
     public ResponseEntity<List<Long>> getCardsOfOneType(@RequestBody RequestForGettingCardsOfOneType request){
         return ResponseEntity.ok().body(
                 cardsRepo
@@ -29,12 +29,12 @@ public class MeResource {
         );
     }
 
-    @PostMapping("/cards")
+    @PostMapping
     public ResponseEntity<?> addCard(@RequestBody CardEntity newCard){
         return ResponseEntity.ok().body(cardsRepo.save(newCard));
     }
 
-    @PutMapping("/cards")
+    @PutMapping
     public HttpStatus changeCard(@RequestBody CardChangeCommand command){
         CardEntity modifyingCard = cardsRepo.findById(command.cardID).get();
 
@@ -62,6 +62,8 @@ public class MeResource {
                     break;
                 case "category":
                     modifyingCard.setCategory(command.onWhat);
+                default:
+                    break;
             }
 
             cardsRepo.save(modifyingCard);

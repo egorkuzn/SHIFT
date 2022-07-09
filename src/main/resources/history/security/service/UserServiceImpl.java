@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.domain.UserEntity;
-import ru.cft.clorental.domain.RoleEntity;
+import ru.cft.clorental.model.UserEntity;
+import ru.cft.clorental.model.RoleEntity;
 import ru.cft.clorental.repos.RoleRepo;
-import ru.cft.clorental.repos.UserRepo;
+import ru.cft.clorental.repos.UsersRepo;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final UserRepo userRepo;
+    private final UsersRepo userRepo;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
 

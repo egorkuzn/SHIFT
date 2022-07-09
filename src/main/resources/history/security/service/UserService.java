@@ -1,7 +1,7 @@
 package ru.cft.clorental.service;
 
-import ru.cft.clorental.domain.RoleEntity;
-import ru.cft.clorental.domain.UserEntity;
+import ru.cft.clorental.model.RoleEntity;
+import ru.cft.clorental.model.UserEntity;
 
 import java.util.List;
 

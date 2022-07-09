@@ -1,8 +1,8 @@
 package ru.cft.clorental.repos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.cft.clorental.domain.UserEntity;
+import ru.cft.clorental.model.UserEntity;
 
-public interface UserRepo extends JpaRepository<UserEntity, Long> {
+public interface UsersRepo extends JpaRepository<UserEntity, Long> {
     UserEntity findByUsername(String username);
 }

@@ -1,4 +1,4 @@
-package ru.cft.clorental.domain;
+package ru.cft.clorental.model;
 
 public class RequestForGettingCardsOfOneType {
     public Long id;
