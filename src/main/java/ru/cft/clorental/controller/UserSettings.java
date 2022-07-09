@@ -1,32 +1,30 @@
 package ru.cft.clorental.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.cft.clorental.model.RequestToChangeUserParam;
+import ru.cft.clorental.model.RequestToGetUserParam;
+import ru.cft.clorental.service.UserSettingsService;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/me/settings")
+@RequestMapping("user")
 public class UserSettings {
-//    private UsersRepo userRepo;
-//
-//    @GetMapping
-//    public void getUserParam(@RequestBody CommandToChangeUserParam command){
-//        switch(command.what){
-//            case "id":
-//
-//                break;
-//            case "name":
-//                break;
-//            case "surname":
-//                break;
-//            case "email":
-//                break;
-//            case "phone":
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//
-//    @PostMapping
-//
-//    @PutMapping
+    private UserSettingsService userSettingsService;
+    @Autowired
+    UserSettings(UserSettingsService userSettingsService){
+        this.userSettingsService = userSettingsService;
+    }
+    @GetMapping("{username}")
+    public ResponseEntity<String> getInfoAboutUserParam(@RequestBody RequestToGetUserParam request){
+        return ResponseEntity.ok().body(userSettingsService.getUserParam(request));
+    }
+
+    @PutMapping("{username}")
+    public ResponseEntity<Boolean> changeCard(@RequestBody RequestToChangeUserParam request) {
+        return ResponseEntity.ok().body(userSettingsService.changeUserParam(request));
+    }
 }

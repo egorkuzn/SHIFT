@@ -1,75 +1,38 @@
 package ru.cft.clorental.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.clorental.model.CardChangeCommand;
-import ru.cft.clorental.model.CardEntity;
+import ru.cft.clorental.repos.model.CardEntity;
 import ru.cft.clorental.model.RequestForGettingCardsOfOneType;
-import ru.cft.clorental.repos.CardsRepo;
-
-import java.sql.Date;
+import ru.cft.clorental.service.UserCardsService;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
-@RequestMapping("/me/cards")
+@RequestMapping("cards")
 public class UserCards {
-    CardsRepo cardsRepo;
+    UserCardsService userCardsService;
 
-    @GetMapping
+    @Autowired
+    public UserCards(UserCardsService userCardsService){
+        this.userCardsService = userCardsService;
+    }
+
+    @GetMapping("{username}")
     public ResponseEntity<List<Long>> getCardsOfOneType(@RequestBody RequestForGettingCardsOfOneType request){
-        return ResponseEntity.ok().body(
-                cardsRepo
-                        .findAllByOAndOwnerIDAndAndCategory(
-                                request.id,
-                                request.type)
-        );
+        return ResponseEntity.ok().body(userCardsService.getCards(request));
     }
 
-    @PostMapping
-    public ResponseEntity<?> addCard(@RequestBody CardEntity newCard){
-        return ResponseEntity.ok().body(cardsRepo.save(newCard));
+    @PostMapping("{username}")
+    public ResponseEntity<Boolean> addCard(@RequestBody CardEntity newCard){
+        return ResponseEntity.ok().body(userCardsService.addNewCard(newCard));
     }
 
-    @PutMapping
-    public HttpStatus changeCard(@RequestBody CardChangeCommand command){
-        CardEntity modifyingCard = cardsRepo.findById(command.cardID).get();
-
-        if(modifyingCard.getOwnerID().equals(command.userID)) {
-            cardsRepo.delete(modifyingCard);
-
-            switch (command.what) {
-                case "image":
-                    modifyingCard.setImage(command.onWhat);
-                    break;
-                case "price":
-                    modifyingCard.setPrice(Double.parseDouble(command.onWhat));
-                    break;
-                case "ownedId":
-                    modifyingCard.setOwnerID(Long.parseLong(command.onWhat));
-                    break;
-                case "isRent":
-                    modifyingCard.setRent(Boolean.parseBoolean(command.onWhat));
-                    break;
-                case "customerID":
-                    modifyingCard.setCustormerId(Long.parseLong(command.onWhat));
-                    break;
-                case "term":
-                    modifyingCard.setTerm(Date.valueOf(command.onWhat));
-                    break;
-                case "category":
-                    modifyingCard.setCategory(command.onWhat);
-                default:
-                    break;
-            }
-
-            cardsRepo.save(modifyingCard);
-            return OK;
-        }
-
-        return FORBIDDEN;
+    @PutMapping("{username}")
+    public ResponseEntity<Boolean> changeCard(@RequestBody CardChangeCommand command) {
+        return ResponseEntity.ok().body(userCardsService.makeChanges(command));
     }
 }
+

@@ -1,17 +1,24 @@
 package ru.cft.clorental.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.model.CardEntity;
+import ru.cft.clorental.repos.model.CardEntity;
 import ru.cft.clorental.repos.CardsRepo;
+import ru.cft.clorental.service.CardsService;
 
 @RestController
 @RequestMapping("/cards")
 public class CardsResource {
-    public CardsRepo cardsRepo;
+    CardsService cardsService;
+
+    @Autowired
+    public CardsResource(CardsService cardsService){
+        this.cardsService = cardsService;
+    }
 
     @GetMapping
     public ResponseEntity<CardEntity> getCard(Long id){
-        return ResponseEntity.ok().body(cardsRepo.findById(id).get());
+        return ResponseEntity.ok().body(cardsService.findById(id));
     }
 }

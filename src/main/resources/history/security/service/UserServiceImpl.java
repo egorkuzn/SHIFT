@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.UserEntity;
+import ru.cft.clorental.repos.model.UserEntity;
 import ru.cft.clorental.model.RoleEntity;
 import ru.cft.clorental.repos.RoleRepo;
 import ru.cft.clorental.repos.UsersRepo;
