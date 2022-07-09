@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.clorental.repos.model.CardEntity;
-import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.service.CardsService;
 
 @RestController

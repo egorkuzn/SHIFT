@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.clorental.model.CardChangeCommand;
+import ru.cft.clorental.model.NewCardForm;
 import ru.cft.clorental.repos.model.CardEntity;
 import ru.cft.clorental.model.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.service.UserCardsService;
@@ -26,7 +27,7 @@ public class UserCards {
     }
 
     @PostMapping("{username}")
-    public ResponseEntity<Boolean> addCard(@RequestBody CardEntity newCard){
+    public ResponseEntity<Boolean> addCard(@RequestBody NewCardForm newCard){
         return ResponseEntity.ok().body(userCardsService.addNewCard(newCard));
     }
 

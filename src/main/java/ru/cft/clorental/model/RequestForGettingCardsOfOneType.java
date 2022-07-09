@@ -1,6 +1,6 @@
 package ru.cft.clorental.model;
 
 public class RequestForGettingCardsOfOneType {
-    public Long id;
+    public Long userID;
     public String type;
 }
