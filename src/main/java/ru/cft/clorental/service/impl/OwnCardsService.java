@@ -1,50 +1,34 @@
-package ru.cft.clorental.service;
+package ru.cft.clorental.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cft.clorental.model.CardChangeCommand;
 import ru.cft.clorental.model.NewCardForm;
 import ru.cft.clorental.model.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.repos.CardsRepo;
+import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
+import ru.cft.clorental.service.CardsService;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Collection;
 
 @Service
-public class UserCardsService {
-    private final CardsRepo cardsRepo;
-
-    @Autowired
-    public UserCardsService(CardsRepo cardsRepo) {
-        this.cardsRepo = cardsRepo;
+public class OwnCardsService extends CardsService {
+    public OwnCardsService(CardsRepo cardsRepo, UsersRepo usersRepo) {
+        super(cardsRepo, usersRepo);
     }
 
-
-    public List<Long> getCards(RequestForGettingCardsOfOneType request) {
-        return cardsRepo.findAllByOwnerIDAndCategory(request.userID, request.type);
+    @Override
+    protected Collection<CardEntity> typeCollection(RequestForGettingCardsOfOneType request){
+        return usersRepo.findFirstById(request.userID).own;
     }
 
-    public boolean addNewCard(NewCardForm form) {
-        CardEntity cardEntity = generatedNewCard(form);
-        cardsRepo.save(cardEntity);
-        return true;
+    @Override
+    protected void addInTypeNewCard(NewCardForm form, CardEntity cardEntity) {
+        usersRepo.findFirstById(form.userID).own.add(cardEntity);
     }
 
-    private CardEntity generatedNewCard(NewCardForm form) {
-        CardEntity cardEntity = new CardEntity();
-
-        cardEntity.customerId = form.userID;
-        cardEntity.category = form.category;
-        cardEntity.description = form.description;
-        cardEntity.price = form.price;
-        cardEntity.term = form.term;
-        cardEntity.image = form.imageURL;
-        cardEntity.isRent = false;
-
-        return cardEntity;
-    }
-
+    @Override
     public boolean makeChanges(CardChangeCommand command) {
         CardEntity card = cardsRepo.findFirstByOwnerIDAndId(command.userID, command.cardID);
 

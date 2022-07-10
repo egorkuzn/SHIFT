@@ -10,29 +10,34 @@ import ru.cft.clorental.service.LoginService;
 
 @RestController
 @RequestMapping("/login")
-public class LoginController {
+public class Login {
     private final LoginService loginService;
 
     @Autowired
-    public LoginController(LoginService loginService){
+    public Login(LoginService loginService){
         this.loginService = loginService;
     }
 
-    @PatchMapping
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<String> getIdByLoginPassword(){
+        return ResponseEntity.ok().body("Привет дружок пирожок)))");
+    }
+
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Long> getIdByLoginPassword(@RequestBody AuthorisationForm form){
         return ResponseEntity.ok().body(loginService.getIdByForm(form));
     }
 
-    @PostMapping
+    @PutMapping
     @ResponseBody
     public ResponseEntity<Long> registration(@RequestBody RegistrationForm form){
         return ResponseEntity.ok().body(loginService.registration(form));
     }
 
-    @PutMapping
+    @PatchMapping
     @ResponseBody
-
     public ResponseEntity<Long> confirming(@RequestBody ConfirmingForm form){
         return ResponseEntity.ok().body(loginService.confirming(form));
     }

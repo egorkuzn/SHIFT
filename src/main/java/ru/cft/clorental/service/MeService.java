@@ -4,20 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cft.clorental.model.RequestToChangeUserParam;
 import ru.cft.clorental.model.RequestToGetUserParam;
-import ru.cft.clorental.model.SecurityBlock;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.UserEntity;
 
 @Service
-public class UserSettingsService {
+public class MeService {
     UsersRepo usersRepo;
     @Autowired
-    public UserSettingsService(UsersRepo usersRepo){
+    public MeService(UsersRepo usersRepo){
         this.usersRepo = usersRepo;
     }
 
     public String getUserParam(RequestToGetUserParam request) {
-        UserEntity user = usersRepo.findById(request.userID).get();
+        UserEntity user = usersRepo.findFirstById(request.userID);
 
         switch (request.paramName){
             case "email" -> {return user.email;}
@@ -29,14 +28,16 @@ public class UserSettingsService {
     }
 
     public boolean changeUserParam(RequestToChangeUserParam request) {
-        UserEntity userEntity = usersRepo.findById(request.userID).get();
-        switch(request.whatChange){
-            case "email" -> userEntity.email = request.onWhatChange;
-            case "name" -> userEntity.name = request.onWhatChange;
-            case "surname" -> userEntity.surname = request.onWhatChange;
-            case "phone" -> userEntity.phone = request.onWhatChange;
-            default -> {}
-        }
+        UserEntity userEntity = usersRepo.findFirstById(request.userID);
+
+        if(userEntity.id.equals(request.userID))
+            switch(request.whatChange){
+                case "email" -> userEntity.email = request.onWhatChange;
+                case "name" -> userEntity.name = request.onWhatChange;
+                case "surname" -> userEntity.surname = request.onWhatChange;
+                case "phone" -> userEntity.phone = request.onWhatChange;
+                default -> {}
+            }
 
         return true;
     }

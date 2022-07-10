@@ -10,7 +10,7 @@ public class CardEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    Long id;
+    public Long id;
 
     @Column(name = "image", nullable = false)
 

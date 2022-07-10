@@ -1,4 +1,4 @@
 package ru.cft.clorental.controller;
 
-public class FeedResource {
+public class Feed {
 }
