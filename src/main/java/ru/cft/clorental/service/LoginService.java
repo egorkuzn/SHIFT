@@ -25,12 +25,13 @@ public class LoginService {
     public Long registration(RegistrationForm form) {
         UserEntity user = newUser(form);
 
-        if(user != null) {
+        if(user != null && usersRepo.findAllByEmail(user.email).isEmpty()) {
             usersRepo.save(user);
             return user.id;
         } else
             return null;
     }
+
 
     public Long confirming(ConfirmingForm form){
         return form.tempID;

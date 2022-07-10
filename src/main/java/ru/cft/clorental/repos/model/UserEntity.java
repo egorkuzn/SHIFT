@@ -2,6 +2,7 @@ package ru.cft.clorental.repos.model;
 
 import javax.persistence.*;
 
+import java.util.Set;
 import java.util.TreeSet;
 
 import static javax.persistence.GenerationType.AUTO;
@@ -25,13 +26,13 @@ public class UserEntity {
     public String phone;
     @OneToMany
     @JoinColumn(name = "favouriteCards", nullable = false)
-    public TreeSet<CardEntity> liked;
+    public Set<CardEntity> liked;
 
     @OneToMany
     @JoinColumn(name = "ownedCards", nullable = false)
-    public TreeSet<CardEntity> own;
+    public Set<CardEntity> own;
 
     @OneToMany
     @JoinColumn(name = "rentCards", nullable = false)
-    public TreeSet<CardEntity> rent;
+    public Set<CardEntity> rent;
 }
