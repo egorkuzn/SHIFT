@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class UserCardsService {
-    final CardsRepo cardsRepo;
+    private final CardsRepo cardsRepo;
 
     @Autowired
     public UserCardsService(CardsRepo cardsRepo) {
@@ -34,7 +34,7 @@ public class UserCardsService {
     private CardEntity generatedNewCard(NewCardForm form) {
         CardEntity cardEntity = new CardEntity();
 
-        cardEntity.custormerId = form.userID;
+        cardEntity.customerId = form.userID;
         cardEntity.category = form.category;
         cardEntity.description = form.description;
         cardEntity.price = form.price;
@@ -49,25 +49,15 @@ public class UserCardsService {
         CardEntity card = cardsRepo.findFirstByOwnerIDAndId(command.userID, command.cardID);
 
         switch (command.what) {
-            case "term":
-                card.term = Date.valueOf(command.onWhat);
-                break;
-            case "price":
-                card.price = Double.parseDouble(command.onWhat);
-                break;
-            case "image":
-                card.image = command.onWhat;
-                break;
-            case "rentStatus":
-                card.isRent = Boolean.getBoolean(command.onWhat);
-                break;
-            case "category":
-                card.category = command.onWhat;
-                break;
-            case "":
-                card.custormerId
-            default:
-                break;
+            case "term" -> card.term = Date.valueOf(command.onWhat);
+            case "price" -> card.price = Double.parseDouble(command.onWhat);
+            case "imageURL" -> card.image = command.onWhat;
+            case "rentStatus" -> card.isRent = Boolean.getBoolean(command.onWhat);
+            case "category" -> card.category = command.onWhat;
+            case "customerID" -> card.customerId = Long.parseLong(command.onWhat);
+            case "ownerID" -> card.ownerID = Long.parseLong(command.onWhat);
+            case "description" -> card.description = command.onWhat;
+            default -> {}
         }
 
         return true;

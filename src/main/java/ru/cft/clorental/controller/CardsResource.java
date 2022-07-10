@@ -17,7 +17,7 @@ public class CardsResource {
     }
 
     @GetMapping
-    public ResponseEntity<CardEntity> getCard(Long id){
+    public ResponseEntity<CardEntity> getCard(@RequestBody Long id){
         return ResponseEntity.ok().body(cardsService.findById(id));
     }
 }

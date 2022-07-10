@@ -7,7 +7,7 @@ import ru.cft.clorental.repos.model.CardEntity;
 
 @Service
 public class CardsService {
-    CardsRepo cardsRepo;
+    final CardsRepo cardsRepo;
 
     @Autowired
     public CardsService(CardsRepo cardsRepo){
@@ -15,6 +15,6 @@ public class CardsService {
     }
 
     public CardEntity findById(Long id) {
-        return cardsRepo.getOne(id);
+        return cardsRepo.findFirstById(id);
     }
 }

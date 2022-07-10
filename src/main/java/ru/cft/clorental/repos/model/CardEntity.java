@@ -6,7 +6,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "Card")
 
-public class CardEntity {
+public class CardEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -21,16 +21,16 @@ public class CardEntity {
     @Column(name = "price", nullable = false)
 
     public Double price;
-    @Column(name = "owner ID", nullable = false)
+    @Column(name = "ownerID", nullable = false)
 
     public Long ownerID;
-    @Column(name = "rent status", nullable = false)
+    @Column(name = "rentStatus", nullable = false)
 
     public boolean isRent;
-    @Column(name = "customer ID", nullable = false)
+    @Column(name = "customerID", nullable = false)
 
-    public Long custormerId;
-    @Column(name = "date when it finish", nullable = false)
+    public Long customerId;
+    @Column(name = "dateWhenItFinish", nullable = false)
 
     public Date term;
     @Column(name = "category", nullable = false)
