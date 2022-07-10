@@ -1,4 +1,4 @@
-package ru.cft.clorental.model;
+package ru.cft.clorental.model.request_forms;
 
 public class CardChangeCommand {
     public Long userID;

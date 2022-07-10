@@ -1,17 +1,17 @@
 package ru.cft.clorental.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.CardChangeCommand;
-import ru.cft.clorental.model.NewCardForm;
-import ru.cft.clorental.model.RequestForGettingCardsOfOneType;
+import ru.cft.clorental.model.request_forms.CardChangeCommand;
+import ru.cft.clorental.model.request_forms.NewCardForm;
+import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
-import ru.cft.clorental.service.CardsService;
+import ru.cft.clorental.service.MeCardsService;
 import java.util.*;
 
 @Service
-public class LikedCardsService extends CardsService {
+public class LikedCardsService extends MeCardsService {
     public LikedCardsService(CardsRepo cardsRepo, UsersRepo usersRepo) {
         super(cardsRepo, usersRepo);
     }

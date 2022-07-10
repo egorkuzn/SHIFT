@@ -3,8 +3,8 @@ package ru.cft.clorental.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.model.RequestToChangeUserParam;
-import ru.cft.clorental.model.RequestToGetUserParam;
+import ru.cft.clorental.model.request_forms.RequestToChangeUserParam;
+import ru.cft.clorental.model.request_forms.RequestToGetUserParam;
 import ru.cft.clorental.service.MeService;
 
 @RestController

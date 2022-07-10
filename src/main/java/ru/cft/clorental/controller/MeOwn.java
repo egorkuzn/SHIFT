@@ -3,9 +3,9 @@ package ru.cft.clorental.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.model.CardChangeCommand;
-import ru.cft.clorental.model.NewCardForm;
-import ru.cft.clorental.model.RequestForGettingCardsOfOneType;
+import ru.cft.clorental.model.request_forms.CardChangeCommand;
+import ru.cft.clorental.model.request_forms.NewCardForm;
+import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.service.impl.OwnCardsService;
 
 import java.util.List;

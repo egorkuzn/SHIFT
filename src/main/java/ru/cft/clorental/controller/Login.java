@@ -3,9 +3,9 @@ package ru.cft.clorental.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.model.AuthorisationForm;
-import ru.cft.clorental.model.ConfirmingForm;
-import ru.cft.clorental.model.RegistrationForm;
+import ru.cft.clorental.model.request_forms.AuthorisationForm;
+import ru.cft.clorental.model.request_forms.ConfirmingForm;
+import ru.cft.clorental.model.request_forms.RegistrationForm;
 import ru.cft.clorental.service.LoginService;
 
 @RestController

@@ -6,6 +6,7 @@ import ru.cft.clorental.repos.model.UserEntity;
 
 @Repository
 public interface UsersRepo extends JpaRepository<UserEntity, Long> {
+    UserEntity findFirstByHashAndEmail(String hash, String email);
     UserEntity findFirstById(Long id);
 
     @Override
