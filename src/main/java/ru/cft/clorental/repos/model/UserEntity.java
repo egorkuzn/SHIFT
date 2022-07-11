@@ -2,37 +2,37 @@ package ru.cft.clorental.repos.model;
 
 import javax.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "UserEntity")
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     public Long id;
-    @Column(name = "hash", nullable = false)
+    @Column(name = "hash")
     public String hash;
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     public String name;
-    @Column(name = "surname", nullable = false)
+    @Column(name = "surname")
     public String surname;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     public String email;
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
 
     public String phone;
     @OneToMany
-    @JoinColumn(name = "favouriteCards", nullable = false)
-    public Set<CardEntity> liked;
+    @JoinColumn(name = "likedCards")
+    public Set<CardEntity> liked = new HashSet<>();
 
     @OneToMany
-    @JoinColumn(name = "ownedCards", nullable = false)
-    public Set<CardEntity> own;
+    @JoinColumn(name = "ownCards")
+    public Set<CardEntity> own = new HashSet<>();
 
     @OneToMany
-    @JoinColumn(name = "rentCards", nullable = false)
-    public Set<CardEntity> rent;
+    @JoinColumn(name = "rentCards")
+    public Set<CardEntity> rent = new HashSet<>();
 }

@@ -1,9 +1,7 @@
 package ru.cft.clorental.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.request_forms.CardChangeCommand;
-import ru.cft.clorental.model.request_forms.NewCardForm;
-import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
+import ru.cft.clorental.model.UserIDCardID;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
@@ -16,18 +14,17 @@ public class LikedCardsService extends MeCardsService {
         super(cardsRepo, usersRepo);
     }
 
-    @Override
-    protected Collection<CardEntity> typeCollection(RequestForGettingCardsOfOneType request){
-         return usersRepo.findFirstById(request.userID).liked;
+    protected Set<CardEntity> returnTypeSet(Long userID){
+        return usersRepo.findFirstById(userID).liked;
     }
 
-    @Override
-    protected void addInTypeNewCard(NewCardForm form, CardEntity cardEntity) {
-        usersRepo.findFirstById(form.userID).liked.add(cardEntity);
-    }
 
-    @Override
-    public boolean makeChanges(CardChangeCommand command) {
-        return false;
+    public boolean addNewCard(UserIDCardID command){
+        usersRepo.findFirstById(command.userID).liked.add(cardsRepo.findFirstById(command.cardID));
+        return true;
+    }
+    public boolean delete(UserIDCardID command) {
+        usersRepo.findFirstById(command.userID).liked.remove(cardsRepo.findFirstById(command.cardID));
+        return true;
     }
 }

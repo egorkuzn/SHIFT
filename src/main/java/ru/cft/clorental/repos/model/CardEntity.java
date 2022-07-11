@@ -12,28 +12,28 @@ public class CardEntity{
     @Column(name = "id", nullable = false)
     public Long id;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image")
 
     public String image;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
 
     public String description;
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
 
     public Double price;
-    @Column(name = "ownerID", nullable = false)
+    @Column(name = "ownerID")
 
     public Long ownerID;
-    @Column(name = "rentStatus", nullable = false)
+    @Column(name = "rentStatus")
 
     public boolean isRent;
-    @Column(name = "customerID", nullable = false)
+    @Column(name = "customerID")
 
     public Long customerId;
-    @Column(name = "dateWhenItFinish", nullable = false)
+    @Column(name = "dateWhenItFinish")
 
     public Date term;
-    @Column(name = "category", nullable = false)
+    @Column(name = "category")
 
     public String category;
 }

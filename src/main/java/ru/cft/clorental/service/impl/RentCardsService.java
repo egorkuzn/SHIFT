@@ -1,14 +1,12 @@
 package ru.cft.clorental.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.request_forms.CardChangeCommand;
-import ru.cft.clorental.model.request_forms.NewCardForm;
-import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
+import ru.cft.clorental.model.UserIDCardID;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
 import ru.cft.clorental.service.MeCardsService;
-import java.util.Collection;
+import java.util.Set;
 
 @Service
 public class RentCardsService extends MeCardsService {
@@ -16,18 +14,23 @@ public class RentCardsService extends MeCardsService {
         super(cardsRepo, usersRepo);
     }
 
-    @Override
-    protected Collection<CardEntity> typeCollection(RequestForGettingCardsOfOneType request){
-        return usersRepo.findFirstById(request.userID).rent;
+    protected Set<CardEntity> returnTypeSet(Long userID){
+        return usersRepo.findFirstById(userID).rent;
     }
 
-    @Override
-    protected void addInTypeNewCard(NewCardForm form, CardEntity cardEntity) {
-        usersRepo.findFirstById(form.userID).rent.add(cardEntity);
-    }
 
-    @Override
-    public boolean makeChanges(CardChangeCommand command) {
+    public boolean addNewCard(UserIDCardID command){
+        if(!cardsRepo.findFirstById(command.cardID).isRent) {
+            usersRepo.findFirstById(command.userID).rent.add(cardsRepo.findFirstById(command.cardID));
+            cardsRepo.findFirstById(command.cardID).isRent = true;
+            cardsRepo.findFirstById(command.cardID).customerId = command.userID;
+        }
+
+        return true;
+    }
+    public boolean delete(UserIDCardID command) {
+        usersRepo.findFirstById(command.userID).rent.remove(cardsRepo.findFirstById(command.cardID));
+        cardsRepo.findFirstById(command.cardID).isRent = false;
         return true;
     }
 }

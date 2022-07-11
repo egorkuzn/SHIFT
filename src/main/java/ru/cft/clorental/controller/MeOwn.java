@@ -3,6 +3,7 @@ package ru.cft.clorental.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.cft.clorental.model.UserIDCardID;
 import ru.cft.clorental.model.request_forms.CardChangeCommand;
 import ru.cft.clorental.model.request_forms.NewCardForm;
 import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
@@ -35,6 +36,11 @@ public class MeOwn {
     @PatchMapping
     public ResponseEntity<Boolean> changeCard(@RequestBody CardChangeCommand command) {
         return ResponseEntity.ok().body(ownCardsService.makeChanges(command));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Boolean> changeCard(@RequestBody UserIDCardID command) {
+        return ResponseEntity.ok().body(ownCardsService.delete(command));
     }
 }
 
