@@ -8,6 +8,7 @@ import ru.cft.clorental.model.request_forms.NewCardForm;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
+import ru.cft.clorental.repos.model.UserEntity;
 import ru.cft.clorental.service.MeCardsService;
 
 import java.sql.Date;
@@ -23,7 +24,11 @@ public class OwnCardsService extends MeCardsService {
     @Override
     public boolean delete(UserIDCardID command) {
         usersRepo.findFirstByIdAndVerified(command.userID, true).own.remove(cardsRepo.findFirstById(command.cardID));
-        if(!cardsRepo.findFirstById(command.cardID).rent) {
+        CardEntity card = cardsRepo.findFirstById(command.cardID);
+        if(!card.markFromCustomer) {
+            card.rent = false;
+            card.markFromOwner = false;
+
             cardsRepo.deleteById(command.cardID);
             return true;
         }
@@ -44,7 +49,15 @@ public class OwnCardsService extends MeCardsService {
                 case "term" -> card.term = Date.valueOf(command.onWhat);
                 case "price" -> card.price = Double.parseDouble(command.onWhat);
                 case "imageURL" -> card.image = command.onWhat;
-                case "rentStatus" -> card.rent = Boolean.getBoolean(command.onWhat);
+                case "rentStatus" -> {
+                    card.markFromOwner = Boolean.getBoolean(command.onWhat);
+
+                    if(card.markFromCustomer && card.markFromOwner)
+                        card.rent = true;
+
+                    if(!card.markFromCustomer && !card.markFromOwner)
+                        card.rent = false;
+                }
                 case "category" -> card.category = command.onWhat;
                 case "customerID" -> card.customerId = Long.parseLong(command.onWhat);
                 case "ownerID" -> card.ownerID = Long.parseLong(command.onWhat);
@@ -59,9 +72,14 @@ public class OwnCardsService extends MeCardsService {
     }
 
     public boolean addNewCard(NewCardForm form){
+        UserEntity user = usersRepo.findFirstByIdAndVerified(form.userID, true);
+
+        if(user.own.size() == user.maxOwnCount)
+            return false;
+
         CardEntity card = generatedNewCard(form);
         cardsRepo.save(card);
-        usersRepo.findFirstByIdAndVerified(form.userID, true).own.add(card);
+        user.own.add(card);
         usersRepo.flush();
         return true;
     }

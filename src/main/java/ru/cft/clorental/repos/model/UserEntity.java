@@ -30,6 +30,10 @@ public class UserEntity {
 
     @Column(name = "isVerified")
     public Boolean verified;
+    @Column(name = "maxRentCount")
+    public Integer maxRentCount = 10;
+    @Column(name = "maxOwnCount")
+    public Integer maxOwnCount = 10;
     @OneToMany
     @JoinColumn(name = "likedCards")
     public Set<CardEntity> liked = new HashSet<>();

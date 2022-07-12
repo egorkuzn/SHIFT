@@ -5,6 +5,7 @@ import ru.cft.clorental.model.UserIDCardID;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
+import ru.cft.clorental.repos.model.UserEntity;
 import ru.cft.clorental.service.MeCardsService;
 import java.util.Set;
 
@@ -20,18 +21,30 @@ public class RentCardsService extends MeCardsService {
 
 
     public boolean addNewCard(UserIDCardID command){
-        if(!cardsRepo.findFirstByIdAndRent(command.cardID,false).rent) {
-            usersRepo.findFirstById(command.userID).rent.add(cardsRepo.findFirstById(command.cardID));
-            usersRepo.flush();
-            cardsRepo.findFirstById(command.cardID).rent = true;
-            cardsRepo.findFirstById(command.cardID).customerId = command.userID;
-        }
+        CardEntity card = cardsRepo.findFirstByIdAndRent(command.cardID,false);
+        UserEntity user = usersRepo.findFirstById(command.userID);
 
+        if(user.rent.size() == user.maxRentCount)
+            return false;
+
+        card.markFromCustomer = true;
+        card.customerId = command.userID;
+
+        user.rent.add(card);
+        usersRepo.flush();
+        cardsRepo.flush();
         return true;
     }
     public boolean delete(UserIDCardID command) {
         usersRepo.findFirstById(command.userID).rent.remove(cardsRepo.findFirstById(command.cardID));
-        cardsRepo.findFirstById(command.cardID).rent = false;
+        cardsRepo.findFirstById(command.cardID).markFromCustomer = false;
+
+        usersRepo.flush();
+        cardsRepo.flush();
+
         return true;
     }
 }
+
+//две галочки
+//дата сдачи
