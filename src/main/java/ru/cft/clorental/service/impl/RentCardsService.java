@@ -20,9 +20,10 @@ public class RentCardsService extends MeCardsService {
 
 
     public boolean addNewCard(UserIDCardID command){
-        if(!cardsRepo.findFirstById(command.cardID).isRent) {
+        if(!cardsRepo.findFirstByIdAndRent(command.cardID,false).rent) {
             usersRepo.findFirstById(command.userID).rent.add(cardsRepo.findFirstById(command.cardID));
-            cardsRepo.findFirstById(command.cardID).isRent = true;
+            usersRepo.flush();
+            cardsRepo.findFirstById(command.cardID).rent = true;
             cardsRepo.findFirstById(command.cardID).customerId = command.userID;
         }
 
@@ -30,7 +31,7 @@ public class RentCardsService extends MeCardsService {
     }
     public boolean delete(UserIDCardID command) {
         usersRepo.findFirstById(command.userID).rent.remove(cardsRepo.findFirstById(command.cardID));
-        cardsRepo.findFirstById(command.cardID).isRent = false;
+        cardsRepo.findFirstById(command.cardID).rent = false;
         return true;
     }
 }

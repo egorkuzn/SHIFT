@@ -8,7 +8,8 @@ import java.util.List;
 
 @Repository
 public interface UsersRepo extends JpaRepository<UserEntity, Long> {
-    UserEntity findFirstByHashAndEmail(String hash, String email);
+    UserEntity findFirstByHashAndEmailAndVerified(String hash, String email, boolean isVerified);
+    UserEntity findFirstByIdAndVerified(Long id, boolean isVerified);
     UserEntity findFirstById(Long id);
     List<UserEntity> findAllByEmail(String email);
 

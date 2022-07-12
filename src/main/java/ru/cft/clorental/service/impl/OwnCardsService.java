@@ -22,38 +22,46 @@ public class OwnCardsService extends MeCardsService {
 
     @Override
     public boolean delete(UserIDCardID command) {
-        usersRepo.findFirstById(command.userID).own.remove(cardsRepo.findFirstById(command.cardID));
-        cardsRepo.deleteById(command.cardID);
-        return true;
+        usersRepo.findFirstByIdAndVerified(command.userID, true).own.remove(cardsRepo.findFirstById(command.cardID));
+        if(!cardsRepo.findFirstById(command.cardID).rent) {
+            cardsRepo.deleteById(command.cardID);
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override
     protected Set<CardEntity> returnTypeSet(Long userID) {
-        return usersRepo.findFirstById(userID).own;
+        return usersRepo.findFirstByIdAndVerified(userID, true).own;
     }
 
     public boolean makeChanges(CardChangeCommand command) {
         CardEntity card = cardsRepo.findFirstByOwnerIDAndId(command.userID, command.cardID);
 
-        switch (command.what) {
-            case "term" -> card.term = Date.valueOf(command.onWhat);
-            case "price" -> card.price = Double.parseDouble(command.onWhat);
-            case "imageURL" -> card.image = command.onWhat;
-            case "rentStatus" -> card.isRent = Boolean.getBoolean(command.onWhat);
-            case "category" -> card.category = command.onWhat;
-            case "customerID" -> card.customerId = Long.parseLong(command.onWhat);
-            case "ownerID" -> card.ownerID = Long.parseLong(command.onWhat);
-            case "description" -> card.description = command.onWhat;
-            default -> {}
+        if(!card.rent) {
+            switch (command.what) {
+                case "term" -> card.term = Date.valueOf(command.onWhat);
+                case "price" -> card.price = Double.parseDouble(command.onWhat);
+                case "imageURL" -> card.image = command.onWhat;
+                case "rentStatus" -> card.rent = Boolean.getBoolean(command.onWhat);
+                case "category" -> card.category = command.onWhat;
+                case "customerID" -> card.customerId = Long.parseLong(command.onWhat);
+                case "ownerID" -> card.ownerID = Long.parseLong(command.onWhat);
+                case "description" -> card.description = command.onWhat;
+                default -> {return false;}
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public boolean addNewCard(NewCardForm form){
         CardEntity card = generatedNewCard(form);
         cardsRepo.save(card);
-        usersRepo.findFirstById(form.userID).own.add(card);
+        usersRepo.findFirstByIdAndVerified(form.userID, true).own.add(card);
         usersRepo.flush();
         return true;
     }
@@ -67,7 +75,7 @@ public class OwnCardsService extends MeCardsService {
         cardEntity.price = form.price;
         cardEntity.term = form.term;
         cardEntity.image = form.imageURL;
-        cardEntity.isRent = false;
+        cardEntity.rent = false;
 
         return cardEntity;
     }

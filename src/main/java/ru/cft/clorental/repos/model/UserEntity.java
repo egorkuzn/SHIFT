@@ -21,9 +21,15 @@ public class UserEntity {
     public String surname;
     @Column(name = "email")
     public String email;
-    @Column(name = "phone")
 
+    @Column(name = "phone")
     public String phone;
+
+    @Column(name = "personalIcon")
+    public String userIconURL;
+
+    @Column(name = "isVerified")
+    public Boolean verified;
     @OneToMany
     @JoinColumn(name = "likedCards")
     public Set<CardEntity> liked = new HashSet<>();

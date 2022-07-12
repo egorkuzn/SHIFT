@@ -19,7 +19,7 @@ public class LoginService {
     }
 
     public Long getIdByForm(AuthorisationForm form) {
-        return usersRepo.findFirstByHashAndEmail(SecurityBlock.getHash(form.password), form.email).id;
+        return usersRepo.findFirstByHashAndEmailAndVerified(SecurityBlock.getHash(form.password), form.email, true).id;
     }
 
     public Long registration(RegistrationForm form) {
@@ -34,6 +34,9 @@ public class LoginService {
 
 
     public Long confirming(ConfirmingForm form){
+        usersRepo.findFirstById(form.tempID).verified = true;
+        usersRepo.flush();
+
         return form.tempID;
     }
 

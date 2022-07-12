@@ -26,11 +26,12 @@ public class CardEntity{
     public Long ownerID;
     @Column(name = "rentStatus")
 
-    public boolean isRent;
+    public Boolean rent;
     @Column(name = "customerID")
 
     public Long customerId;
     @Column(name = "dateWhenItFinish")
+
 
     public Date term;
     @Column(name = "category")
