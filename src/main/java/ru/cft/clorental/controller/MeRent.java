@@ -23,19 +23,19 @@ public class MeRent {
         this.rentCardsService = rentCardsService;
     }
 
-    @ApiOperation(value = "Getting rent cards")
+    @ApiOperation("Getting rent cards")
     @PostMapping
     public ResponseEntity<List<Long>> getCardsOfUser(@RequestBody RequestForGettingCardsOfOneType request){
         return ResponseEntity.ok().body(rentCardsService.getCards(request));
     }
 
-    @ApiOperation(value = "Adding rent card")
+    @ApiOperation("Adding rent card")
     @PutMapping
     public ResponseEntity<Boolean> addCard(@RequestBody UserIDCardID newCard){
         return ResponseEntity.ok().body(rentCardsService.addNewCard(newCard));
     }
 
-    @ApiOperation(value = "Finishing of rent")
+    @ApiOperation("Finishing of rent")
     @DeleteMapping
     public ResponseEntity<Boolean> changeCard(@RequestBody UserIDCardID command) {
         return ResponseEntity.ok().body(rentCardsService.delete(command));

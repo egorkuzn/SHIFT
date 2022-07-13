@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.cft.clorental.model.request_forms.UserIDCardID;
-import ru.cft.clorental.model.request_forms.CardChangeCommand;
-import ru.cft.clorental.model.request_forms.NewCardForm;
-import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
+import ru.cft.clorental.model.request_forms.*;
 import ru.cft.clorental.service.impl.OwnCardsService;
 
 import java.util.List;
@@ -45,6 +42,20 @@ public class MeOwn {
     @ApiOperation("Changing card param")
     public ResponseEntity<Boolean> changeCard(@RequestBody CardChangeCommand command) {
         return ResponseEntity.ok().body(ownCardsService.makeChanges(command));
+    }
+
+    @PostMapping("/add")
+    @ApiOperation("adding picture")
+    public ResponseEntity<Boolean> addingPicture(
+            @RequestPart(value = "imageFile") MultipartFile imageFile,
+            @RequestPart FormToChangePictureInCard request){
+        return ResponseEntity.ok().body(ownCardsService.addPictureToCard(imageFile, request));
+    }
+
+    @PostMapping("/delete")
+    @ApiOperation("deleting picture")
+    public ResponseEntity<Boolean> deletingPicture(@RequestBody FormToChangePictureInCard request){
+        return ResponseEntity.ok().body(ownCardsService.deletePictureInCard(request));
     }
 
     @DeleteMapping

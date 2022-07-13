@@ -3,16 +3,15 @@ package ru.cft.clorental.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.cft.clorental.model.request_forms.FormToChangePictureInCard;
 import ru.cft.clorental.model.request_forms.UserIDCardID;
 import ru.cft.clorental.model.request_forms.CardChangeCommand;
 import ru.cft.clorental.model.request_forms.NewCardForm;
 import ru.cft.clorental.repos.CardsRepo;
-import ru.cft.clorental.repos.ImagesRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
 import ru.cft.clorental.repos.model.UserEntity;
 import ru.cft.clorental.service.ImageLoaderService;
-import ru.cft.clorental.service.ImageService;
 import ru.cft.clorental.service.MeCardsService;
 
 import java.sql.Date;
@@ -101,5 +100,13 @@ public class OwnCardsService extends MeCardsService {
         cardEntity.images.add(imageService.generate(imageFile));
         cardEntity.rent = false;
         return cardEntity;
+    }
+
+    public boolean addPictureToCard(MultipartFile imageFile, FormToChangePictureInCard request) {
+        return true;
+    }
+
+    public boolean deletePictureInCard(FormToChangePictureInCard request) {
+        return true;
     }
 }

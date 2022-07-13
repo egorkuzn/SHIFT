@@ -2,7 +2,9 @@ package ru.cft.clorental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.cft.clorental.model.SecurityBlock;
 import ru.cft.clorental.model.Validator;
+import ru.cft.clorental.model.request_forms.FormForUserDeleting;
 import ru.cft.clorental.model.request_forms.RequestToChangeUserParam;
 import ru.cft.clorental.model.request_forms.RequestToGetUserParam;
 import ru.cft.clorental.repos.UsersRepo;
@@ -54,13 +56,20 @@ public class MeSettingsService {
                         userEntity.phone = request.paramValue;
                     else validVar = false;
                 }
-                case "userIconURL" -> {
-                    userEntity.userIconURL = request.paramValue;
-                }
                 default -> {return false;}
             }
 
         usersRepo.flush();
         return validVar;
+    }
+
+    public boolean delete(FormForUserDeleting request) {
+        UserEntity user = null;
+
+        if ((user = usersRepo.findFirstByIdAndEmailAndHash(request.id, request.email, SecurityBlock.getHash(request.password))) != null) {
+            usersRepo.delete(user);
+            return true;
+        } else
+            return false;
     }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.cft.clorental.model.request_forms.FormForUserDeleting;
 import ru.cft.clorental.model.request_forms.RequestToChangeUserParam;
 import ru.cft.clorental.model.request_forms.RequestToGetUserParam;
 import ru.cft.clorental.service.MeSettingsService;
@@ -19,15 +20,22 @@ public class MeSettings {
         this.meService = meService;
     }
 
-    @ApiOperation(value = "Getting info about user param")
+    @ApiOperation("Getting info about user param")
     @PostMapping
     public ResponseEntity<String> getInfoAboutUserParam(@RequestBody RequestToGetUserParam request){
         return ResponseEntity.ok().body(meService.getUserParam(request));
     }
 
-    @ApiOperation(value = "Changing user's param")
+    @ApiOperation("Changing user's param")
     @PutMapping
-    public ResponseEntity<Boolean> changeCard(@RequestBody RequestToChangeUserParam request) {
+    public ResponseEntity<Boolean> changeUserParam(@RequestBody RequestToChangeUserParam request) {
         return ResponseEntity.ok().body(meService.changeUserParam(request));
     }
+
+    @ApiOperation("Deleting of user")
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteUser(@RequestBody FormForUserDeleting request) {
+        return ResponseEntity.ok().body(meService.delete(request));
+    }
+
 }
