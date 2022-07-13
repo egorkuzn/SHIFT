@@ -35,6 +35,7 @@ public class Login {
         return ResponseEntity.ok().body(loginService.getIdByForm(form));
     }
 
+
     @PutMapping
     @ResponseBody
     @ApiOperation("Registration")

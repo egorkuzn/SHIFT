@@ -1,7 +1,7 @@
 package ru.cft.clorental.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.UserIDCardID;
+import ru.cft.clorental.model.request_forms.UserIDCardID;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;

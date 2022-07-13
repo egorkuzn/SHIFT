@@ -1,7 +1,7 @@
 package ru.cft.clorental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.cft.clorental.model.UserIDCardID;
+import ru.cft.clorental.model.request_forms.UserIDCardID;
 import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
@@ -14,6 +14,8 @@ import java.util.Set;
 public abstract class MeCardsService {
     protected final CardsRepo cardsRepo;
     protected final UsersRepo usersRepo;
+    protected final String path = "http://irental.ddns.net/images";
+
 
     @Autowired
     public MeCardsService(CardsRepo cardsRepo, UsersRepo usersRepo) {

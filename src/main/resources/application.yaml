@@ -1,5 +1,11 @@
 server:
   port: 8080
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: password
+#    key-store-type: pkcs12
+#    key-alias: springboot
+#    key-password: password
 spring:
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
@@ -11,3 +17,21 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "irental.auth@gmail.com"
+    password: oyaazsjdtqnulboa
+    properties:
+      mail:
+        smtp:
+          ssl:
+            protocols:
+              TLSv1.3
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB

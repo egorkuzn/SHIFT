@@ -2,7 +2,8 @@ package ru.cft.clorental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.*;
+import ru.cft.clorental.model.SecurityBlock;
+import ru.cft.clorental.model.Validator;
 import ru.cft.clorental.model.request_forms.AuthorisationForm;
 import ru.cft.clorental.model.request_forms.ConfirmingForm;
 import ru.cft.clorental.model.request_forms.RegistrationForm;
@@ -12,21 +13,27 @@ import ru.cft.clorental.repos.model.UserEntity;
 @Service
 public class LoginService {
     final UsersRepo usersRepo;
+    final EmailService emailService;
 
     @Autowired
-    public LoginService(UsersRepo usersRepo){
+    public LoginService(UsersRepo usersRepo, EmailService emailService){
         this.usersRepo = usersRepo;
+        this.emailService = emailService;
     }
 
     public Long getIdByForm(AuthorisationForm form) {
         return usersRepo.findFirstByHashAndEmailAndVerified(SecurityBlock.getHash(form.password), form.email, true).id;
     }
 
-    public Long registration(RegistrationForm form) {
+    public Long registration(RegistrationForm form){
         UserEntity user = newUser(form);
 
         if(user != null && usersRepo.findAllByEmail(user.email).isEmpty()) {
             usersRepo.save(user);
+            String emailCode = Validator.stringRand();
+            emailService.sendMail(user.email, "Регистрация", "Код подтверждения: " + emailCode);
+            user.emailCode = emailCode;
+            usersRepo.flush();
             return user.id;
         } else
             return null;
@@ -34,7 +41,7 @@ public class LoginService {
 
 
     public Long confirming(ConfirmingForm form){
-        usersRepo.findFirstById(form.tempID).verified = true;
+        usersRepo.findFirstByIdAndEmailCode(form.tempID, form.emailCode).verified = true;
         usersRepo.flush();
 
         return form.tempID;

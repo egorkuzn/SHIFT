@@ -1,24 +1,31 @@
 package ru.cft.clorental.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.UserIDCardID;
+import org.springframework.web.multipart.MultipartFile;
+import ru.cft.clorental.model.request_forms.UserIDCardID;
 import ru.cft.clorental.model.request_forms.CardChangeCommand;
 import ru.cft.clorental.model.request_forms.NewCardForm;
 import ru.cft.clorental.repos.CardsRepo;
+import ru.cft.clorental.repos.ImagesRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
+import ru.cft.clorental.repos.model.ImageEntity;
 import ru.cft.clorental.repos.model.UserEntity;
 import ru.cft.clorental.service.MeCardsService;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Set;
 
 @Service
-@Slf4j
 public class OwnCardsService extends MeCardsService {
-    public OwnCardsService(CardsRepo cardsRepo, UsersRepo usersRepo) {
+    final ImagesRepo imagesRepo;
+    @Autowired
+    public OwnCardsService(CardsRepo cardsRepo, UsersRepo usersRepo, ImagesRepo imagesRepo) {
         super(cardsRepo, usersRepo);
+        this.imagesRepo = imagesRepo;
     }
 
     @Override
@@ -48,7 +55,6 @@ public class OwnCardsService extends MeCardsService {
             switch (command.what) {
                 case "term" -> card.term = Date.valueOf(command.onWhat);
                 case "price" -> card.price = Double.parseDouble(command.onWhat);
-                case "imageURL" -> card.image = command.onWhat;
                 case "rentStatus" -> {
                     card.markFromOwner = Boolean.getBoolean(command.onWhat);
 
@@ -71,20 +77,21 @@ public class OwnCardsService extends MeCardsService {
         return false;
     }
 
-    public boolean addNewCard(NewCardForm form){
+    public boolean addNewCard(NewCardForm form, MultipartFile imageFile){
         UserEntity user = usersRepo.findFirstByIdAndVerified(form.userID, true);
 
         if(user.own.size() == user.maxOwnCount)
             return false;
 
-        CardEntity card = generatedNewCard(form);
+        CardEntity card = generatedNewCard(form, imageFile);
         cardsRepo.save(card);
+        cardsRepo.flush();
         user.own.add(card);
         usersRepo.flush();
         return true;
     }
 
-    protected CardEntity generatedNewCard(NewCardForm form) {
+    protected CardEntity generatedNewCard(NewCardForm form, MultipartFile imageFile) {
         CardEntity cardEntity = new CardEntity();
 
         cardEntity.ownerID = form.userID;
@@ -92,9 +99,20 @@ public class OwnCardsService extends MeCardsService {
         cardEntity.description = form.description;
         cardEntity.price = form.price;
         cardEntity.term = form.term;
-        cardEntity.image = form.imageURL;
+        cardEntity.images.add(generateImgEntity(imageFile));
         cardEntity.rent = false;
-
         return cardEntity;
+    }
+
+    private ImageEntity generateImgEntity(MultipartFile imageFile) {
+        ImageEntity imageEntity = new ImageEntity();
+        try {
+            imageEntity.imageFile = imageFile.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imagesRepo.save(imageEntity);
+        imageEntity.imageURL = path + "/" + imageEntity.id + ".jpeg";
+        return imageEntity;
     }
 }

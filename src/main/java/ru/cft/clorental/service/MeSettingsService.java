@@ -33,29 +33,29 @@ public class MeSettingsService {
         boolean validVar = true;
 
         if(userEntity.id.equals(request.userID))
-            switch(request.whatChange){
+            switch(request.paramName){
                 case "email" -> {
-                    if(Validator.isValidEmail(request.onWhatChange))
-                        userEntity.email = request.onWhatChange;
+                    if(Validator.isValidEmail(request.paramValue))
+                        userEntity.email = request.paramValue;
                     else validVar = false;
                 }
                 case "name" -> {
-                    if(Validator.isValidName(request.onWhatChange))
-                        userEntity.name = request.onWhatChange;
+                    if(Validator.isValidName(request.paramValue))
+                        userEntity.name = request.paramValue;
                     else validVar = false;
                 }
                 case "surname" -> {
-                    if(Validator.isValidSurname(request.onWhatChange))
-                        userEntity.surname = request.onWhatChange;
+                    if(Validator.isValidSurname(request.paramValue))
+                        userEntity.surname = request.paramValue;
                     else validVar = false;
                 }
                 case "phone" -> {
-                    if(Validator.isValidPhone(request.onWhatChange))
-                        userEntity.phone = request.onWhatChange;
+                    if(Validator.isValidPhone(request.paramValue))
+                        userEntity.phone = request.paramValue;
                     else validVar = false;
                 }
                 case "userIconURL" -> {
-                    userEntity.userIconURL = request.onWhatChange;
+                    userEntity.userIconURL = request.paramValue;
                 }
                 default -> {return false;}
             }

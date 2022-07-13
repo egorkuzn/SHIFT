@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cft.clorental.model.request_forms.CardMessage;
 import ru.cft.clorental.repos.model.CardEntity;
 import ru.cft.clorental.service.CardsService;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @RequestMapping("cards")
 @Api(value = "cards")
 public class Cards {
-    CardsService cardsService;
+    final CardsService cardsService;
 
     @Autowired
     public Cards(CardsService cardsService){
@@ -27,7 +28,7 @@ public class Cards {
 
     @ApiOperation("Taking card by id")
     @GetMapping
-    public ResponseEntity<CardEntity> getCardById(@Param("id") Long id){
+    public ResponseEntity<CardMessage> getCardById(@Param("id") Long id){
         return ResponseEntity.ok().body(cardsService.findById(id));
     }
 

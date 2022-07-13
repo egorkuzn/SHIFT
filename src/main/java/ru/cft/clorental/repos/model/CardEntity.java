@@ -1,9 +1,9 @@
 package ru.cft.clorental.repos.model;
 
-import org.apache.el.parser.BooleanNode;
-
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Card")
@@ -14,9 +14,11 @@ public class CardEntity{
     @Column(name = "id", nullable = false)
     public Long id;
 
-    @Column(name = "image")
+    @OneToMany
+    @JoinColumn(name = "images")
+    public
+    Set<ImageEntity> images = new HashSet<>();
 
-    public String image;
     @Column(name = "description")
 
     public String description;

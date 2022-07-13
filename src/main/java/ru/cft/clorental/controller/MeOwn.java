@@ -5,7 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.model.UserIDCardID;
+import org.springframework.web.multipart.MultipartFile;
+import ru.cft.clorental.model.request_forms.UserIDCardID;
 import ru.cft.clorental.model.request_forms.CardChangeCommand;
 import ru.cft.clorental.model.request_forms.NewCardForm;
 import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequestMapping("me/own")
 @Api(value = "Owned cards")
 public class MeOwn {
-    OwnCardsService ownCardsService;
+    final OwnCardsService ownCardsService;
 
     @Autowired
     public MeOwn(OwnCardsService ownCardsService){
@@ -34,8 +35,10 @@ public class MeOwn {
 
     @PutMapping
     @ApiOperation("New card creation")
-    public ResponseEntity<Boolean> addCard(@RequestBody NewCardForm newCard){
-        return ResponseEntity.ok().body(ownCardsService.addNewCard(newCard));
+    public ResponseEntity<Boolean> addCard(
+            @RequestPart (value = "imageFile") MultipartFile imageFile,
+            @RequestPart NewCardForm newCard){
+        return ResponseEntity.ok().body(ownCardsService.addNewCard(newCard, imageFile));
     }
 
     @PatchMapping

@@ -5,9 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.clorental.model.UserIDCardID;
-import ru.cft.clorental.model.request_forms.CardChangeCommand;
-import ru.cft.clorental.model.request_forms.NewCardForm;
+import ru.cft.clorental.model.request_forms.UserIDCardID;
 import ru.cft.clorental.model.request_forms.RequestForGettingCardsOfOneType;
 import ru.cft.clorental.service.impl.LikedCardsService;
 

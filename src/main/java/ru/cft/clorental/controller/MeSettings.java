@@ -13,7 +13,7 @@ import ru.cft.clorental.service.MeSettingsService;
 @RequestMapping("me/settings")
 @Api(value = "Settings")
 public class MeSettings {
-    private MeSettingsService meService;
+    final MeSettingsService meService;
     @Autowired
     MeSettings(MeSettingsService meService){
         this.meService = meService;

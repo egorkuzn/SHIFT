@@ -11,6 +11,7 @@ public interface UsersRepo extends JpaRepository<UserEntity, Long> {
     UserEntity findFirstByHashAndEmailAndVerified(String hash, String email, boolean isVerified);
     UserEntity findFirstByIdAndVerified(Long id, boolean isVerified);
     UserEntity findFirstById(Long id);
+    UserEntity findFirstByIdAndEmailCode(Long id, String emailCode);
     List<UserEntity> findAllByEmail(String email);
 
     @Override

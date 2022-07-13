@@ -1,11 +1,8 @@
 package ru.cft.clorental.model;
-
-import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
-
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Pattern;
 
-@Slf4j
 public class Validator {
     public static boolean isValidPassword(String password) {
         return true;
@@ -14,52 +11,48 @@ public class Validator {
     public static boolean isValidEmail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pattern = Pattern.compile(regex);
-        if(pattern.matcher(email).matches()) {
-            log.info("yes");
-            return true;
-        }
-        else {
-            log.info("no");
-            return false;
-        }
+        return pattern.matcher(email).matches();
     }
 
     public static boolean isValidName(String name) {
         String regex = "^[А-Я][а-я]+$";
         Pattern pattern = Pattern.compile(regex);
-        if(pattern.matcher(name).matches()) {
-            log.info("yes");
-            return true;
-        }
-        else {
-            log.info("no");
-            return false;
-        }
+        return pattern.matcher(name).matches();
     }
 
     public static boolean isValidSurname(String surname) {
         String regex = "^[А-Я][а-я]+$";
         Pattern pattern = Pattern.compile(regex);
-        if(pattern.matcher(surname).matches()) {
-            log.info("yes");
-            return true;
-        }
-        else {
-            log.info("no");
-            return false;
-        }
+        return pattern.matcher(surname).matches();
     }
 
     public static boolean isValidPhone(String phone) {
         String regex = "^\\+7\\d{10}$";
         Pattern pattern = Pattern.compile(regex);
-        if(pattern.matcher(phone).matches()) {
-            log.info("yes");
-            return true;
-        }
-        else {
-            log.info("no");
-            return false;
-        }
+        return pattern.matcher(phone).matches();
+    }
+
+    static ArrayList<Character> list = new ArrayList<>();
+    static Random random = new Random();
+    static int LENGTH = 12;
+    public static String stringRand() {
+        if(list.size() == 0)
+            genList();
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(int i = 0; i < LENGTH; i++)
+            stringBuilder.append(randChar());
+
+        return stringBuilder.toString();
+    }
+
+    private static char randChar(){
+        return list.get(random.nextInt(list.size()));
+    }
+
+    private static void genList() {
+        for(char i = '!'; i <'z'; i++)
+            list.add(i);
     }
 }
