@@ -10,22 +10,21 @@ import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.ImagesRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
-import ru.cft.clorental.repos.model.ImageEntity;
 import ru.cft.clorental.repos.model.UserEntity;
+import ru.cft.clorental.service.ImageLoaderService;
+import ru.cft.clorental.service.ImageService;
 import ru.cft.clorental.service.MeCardsService;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Date;
 import java.util.Set;
 
 @Service
 public class OwnCardsService extends MeCardsService {
-    final ImagesRepo imagesRepo;
+    final ImageLoaderService imageService;
     @Autowired
-    public OwnCardsService(CardsRepo cardsRepo, UsersRepo usersRepo, ImagesRepo imagesRepo) {
+    public OwnCardsService(CardsRepo cardsRepo, UsersRepo usersRepo, ImageLoaderService imageService) {
         super(cardsRepo, usersRepo);
-        this.imagesRepo = imagesRepo;
+        this.imageService = imageService;
     }
 
     @Override
@@ -99,20 +98,8 @@ public class OwnCardsService extends MeCardsService {
         cardEntity.description = form.description;
         cardEntity.price = form.price;
         cardEntity.term = form.term;
-        cardEntity.images.add(generateImgEntity(imageFile));
+        cardEntity.images.add(imageService.generate(imageFile));
         cardEntity.rent = false;
         return cardEntity;
-    }
-
-    private ImageEntity generateImgEntity(MultipartFile imageFile) {
-        ImageEntity imageEntity = new ImageEntity();
-        try {
-            imageEntity.imageFile = imageFile.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        imagesRepo.save(imageEntity);
-        imageEntity.imageURL = path + "/" + imageEntity.id + ".jpeg";
-        return imageEntity;
     }
 }

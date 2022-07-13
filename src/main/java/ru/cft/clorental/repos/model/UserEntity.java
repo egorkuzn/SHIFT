@@ -25,8 +25,9 @@ public class UserEntity {
     @Column(name = "phone")
     public String phone;
 
-    @Column(name = "personalIcon")
-    public String userIconURL;
+    @OneToOne
+    @JoinColumn(name = "personalIcon")
+    public ImageEntity personalIcon;
 
     @Column(name = "isVerified")
     public Boolean verified;

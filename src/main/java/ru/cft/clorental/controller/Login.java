@@ -5,10 +5,14 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.cft.clorental.model.request_forms.AuthorisationForm;
 import ru.cft.clorental.model.request_forms.ConfirmingForm;
 import ru.cft.clorental.model.request_forms.RegistrationForm;
+import ru.cft.clorental.model.request_forms.UserMessage;
 import ru.cft.clorental.service.LoginService;
+
+import javax.mail.Multipart;
 
 @RestController
 @RequestMapping("login")
@@ -31,7 +35,7 @@ public class Login {
     @PostMapping
     @ResponseBody
     @ApiOperation("Authorization")
-    public ResponseEntity<Long> getIdByLoginPassword(@RequestBody AuthorisationForm form){
+    public ResponseEntity<UserMessage> getIdByLoginPassword(@RequestBody AuthorisationForm form){
         return ResponseEntity.ok().body(loginService.getIdByForm(form));
     }
 
@@ -39,8 +43,10 @@ public class Login {
     @PutMapping
     @ResponseBody
     @ApiOperation("Registration")
-    public ResponseEntity<Long> registration(@RequestBody RegistrationForm form){
-        return ResponseEntity.ok().body(loginService.registration(form));
+    public ResponseEntity<Long> registration(
+            @RequestPart (value = "userIcon") MultipartFile userIcon,
+            @RequestPart RegistrationForm form){
+        return ResponseEntity.ok().body(loginService.registration(form, userIcon));
     }
 
     @PatchMapping

@@ -14,8 +14,6 @@ import java.util.Set;
 public abstract class MeCardsService {
     protected final CardsRepo cardsRepo;
     protected final UsersRepo usersRepo;
-    protected final String path = "http://irental.ddns.net/images";
-
 
     @Autowired
     public MeCardsService(CardsRepo cardsRepo, UsersRepo usersRepo) {

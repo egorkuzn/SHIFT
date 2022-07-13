@@ -2,31 +2,40 @@ package ru.cft.clorental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.cft.clorental.model.SecurityBlock;
 import ru.cft.clorental.model.Validator;
 import ru.cft.clorental.model.request_forms.AuthorisationForm;
 import ru.cft.clorental.model.request_forms.ConfirmingForm;
 import ru.cft.clorental.model.request_forms.RegistrationForm;
+import ru.cft.clorental.model.request_forms.UserMessage;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.UserEntity;
 
 @Service
 public class LoginService {
+    final ImageLoaderService imageService;
     final UsersRepo usersRepo;
     final EmailService emailService;
 
     @Autowired
-    public LoginService(UsersRepo usersRepo, EmailService emailService){
+    public LoginService(ImageLoaderService imageService, UsersRepo usersRepo, EmailService emailService){
+        this.imageService = imageService;
         this.usersRepo = usersRepo;
         this.emailService = emailService;
     }
 
-    public Long getIdByForm(AuthorisationForm form) {
-        return usersRepo.findFirstByHashAndEmailAndVerified(SecurityBlock.getHash(form.password), form.email, true).id;
+    public UserMessage getIdByForm(AuthorisationForm form) {
+        UserEntity user = null;
+
+        if((user = usersRepo.findFirstByHashAndEmailAndVerified(SecurityBlock.getHash(form.password), form.email, true)) != null)
+            return new UserMessage(user);
+        else
+            return null;
     }
 
-    public Long registration(RegistrationForm form){
-        UserEntity user = newUser(form);
+    public Long registration(RegistrationForm form, MultipartFile userIcon){
+        UserEntity user = newUser(form, userIcon);
 
         if(user != null && usersRepo.findAllByEmail(user.email).isEmpty()) {
             usersRepo.save(user);
@@ -47,7 +56,7 @@ public class LoginService {
         return form.tempID;
     }
 
-    UserEntity newUser(RegistrationForm form){
+    UserEntity newUser(RegistrationForm form, MultipartFile userIcon){
         if(isValidForm(form)) {
             UserEntity user = new UserEntity();
             user.hash = form.password;
@@ -55,7 +64,7 @@ public class LoginService {
             user.name = form.name;
             user.surname = form.surname;
             user.phone = form.phone;
-
+            user.personalIcon = imageService.generate(userIcon);
             return user;
         }
 
