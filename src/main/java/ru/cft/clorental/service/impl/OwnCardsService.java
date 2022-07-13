@@ -3,13 +3,11 @@ package ru.cft.clorental.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.cft.clorental.model.request_forms.FormToChangePictureInCard;
-import ru.cft.clorental.model.request_forms.UserIDCardID;
-import ru.cft.clorental.model.request_forms.CardChangeCommand;
-import ru.cft.clorental.model.request_forms.NewCardForm;
+import ru.cft.clorental.model.request_forms.*;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
 import ru.cft.clorental.repos.model.CardEntity;
+import ru.cft.clorental.repos.model.ImageEntity;
 import ru.cft.clorental.repos.model.UserEntity;
 import ru.cft.clorental.service.ImageLoaderService;
 import ru.cft.clorental.service.MeCardsService;
@@ -102,11 +100,29 @@ public class OwnCardsService extends MeCardsService {
         return cardEntity;
     }
 
-    public boolean addPictureToCard(MultipartFile imageFile, FormToChangePictureInCard request) {
-        return true;
+    public boolean addPictureToCard(MultipartFile imageFile, FormToAddPictureInCard request) {
+        CardEntity card;
+
+        if((card = cardsRepo.findFirstByIdAndRentAndOwnerID(request.cardID, false, request.userID)) != null){
+            card.images.add(imageService.generate(imageFile));
+            return true;
+        }
+
+        return false;
     }
 
-    public boolean deletePictureInCard(FormToChangePictureInCard request) {
-        return true;
+    public boolean deletePictureInCard(FormToDeletePictureInCard request) {
+        CardEntity card;
+
+        if((card = cardsRepo.findFirstByIdAndRentAndOwnerID(request.cardID, false, request.userID)) != null){
+            for(ImageEntity elem : card.images)
+                if(elem.imageURL.equals(request.imageURL)) {
+                    card.images.remove(elem);
+                    return true;
+                }
+
+        }
+
+        return false;
     }
 }

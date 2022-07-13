@@ -48,13 +48,13 @@ public class MeOwn {
     @ApiOperation("adding picture")
     public ResponseEntity<Boolean> addingPicture(
             @RequestPart(value = "imageFile") MultipartFile imageFile,
-            @RequestPart FormToChangePictureInCard request){
+            @RequestPart FormToAddPictureInCard request){
         return ResponseEntity.ok().body(ownCardsService.addPictureToCard(imageFile, request));
     }
 
     @PostMapping("/delete")
     @ApiOperation("deleting picture")
-    public ResponseEntity<Boolean> deletingPicture(@RequestBody FormToChangePictureInCard request){
+    public ResponseEntity<Boolean> deletingPicture(@RequestBody FormToAddPictureInCard request){
         return ResponseEntity.ok().body(ownCardsService.deletePictureInCard(request));
     }
 
