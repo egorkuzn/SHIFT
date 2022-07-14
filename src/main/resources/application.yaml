@@ -1,11 +1,5 @@
 server:
   port: 8080
-#  ssl:
-#    key-store: classpath:keystore.p12
-#    key-store-password: password
-#    key-store-type: pkcs12
-#    key-alias: springboot
-#    key-password: password
 spring:
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}

@@ -48,4 +48,8 @@ public class UserEntity {
     @OneToMany
     @JoinColumn(name = "rentCards")
     public Set<CardEntity> rent = new HashSet<>();
+    @OneToMany
+    @JoinColumn(name = "discussion")
+    public Set<DiscussionEntity> discussion;
+
 }

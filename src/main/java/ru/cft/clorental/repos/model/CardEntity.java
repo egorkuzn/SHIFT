@@ -16,9 +16,7 @@ public class CardEntity{
 
     @OneToMany
     @JoinColumn(name = "images")
-    public
-    Set<ImageEntity> images = new HashSet<>();
-
+    public Set<ImageEntity> images = new HashSet<>();
     @Column(name = "description")
 
     public String description;

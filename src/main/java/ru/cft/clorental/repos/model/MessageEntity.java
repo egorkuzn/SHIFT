@@ -1,6 +1,5 @@
 package ru.cft.clorental.repos.model;
 
-
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.AUTO;
@@ -12,8 +11,6 @@ public class MessageEntity {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = AUTO)
     public Long id;
-    @Column(name = "userId")
-    public Long userId;
     @Column(name = "message")
     public String message;
 }
