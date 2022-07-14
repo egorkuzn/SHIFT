@@ -32,7 +32,14 @@ public class OwnCardsService extends MeCardsService {
             card.rent = false;
             card.markFromOwner = false;
 
+            for(ImageEntity elem: card.images){
+                card.images.remove(elem);
+                imageService.delete(elem);
+            }
+
             cardsRepo.deleteById(command.cardID);
+            cardsRepo.flush();
+
             return true;
         }
         else
@@ -73,13 +80,13 @@ public class OwnCardsService extends MeCardsService {
         return false;
     }
 
-    public boolean addNewCard(NewCardForm form, MultipartFile imageFile){
+    public boolean addNewCard(NewCardForm form){
         UserEntity user = usersRepo.findFirstByIdAndVerified(form.userID, true);
 
         if(user.own.size() == user.maxOwnCount)
             return false;
 
-        CardEntity card = generatedNewCard(form, imageFile);
+        CardEntity card = generatedNewCard(form);
         cardsRepo.save(card);
         cardsRepo.flush();
         user.own.add(card);
@@ -87,7 +94,7 @@ public class OwnCardsService extends MeCardsService {
         return true;
     }
 
-    protected CardEntity generatedNewCard(NewCardForm form, MultipartFile imageFile) {
+    protected CardEntity generatedNewCard(NewCardForm form) {
         CardEntity cardEntity = new CardEntity();
 
         cardEntity.ownerID = form.userID;
@@ -95,16 +102,16 @@ public class OwnCardsService extends MeCardsService {
         cardEntity.description = form.description;
         cardEntity.price = form.price;
         cardEntity.term = form.term;
-        cardEntity.images.add(imageService.generate(imageFile));
         cardEntity.rent = false;
         return cardEntity;
     }
 
-    public boolean addPictureToCard(MultipartFile imageFile, FormToAddPictureInCard request) {
+    public boolean addPictureToCard(MultipartFile imageFile, long userID, long cardID) {
         CardEntity card;
 
-        if((card = cardsRepo.findFirstByIdAndRentAndOwnerID(request.cardID, false, request.userID)) != null){
+        if((card = cardsRepo.findFirstByIdAndRentAndOwnerID(cardID, false, userID)) != null){
             card.images.add(imageService.generate(imageFile));
+            cardsRepo.flush();
             return true;
         }
 
@@ -118,6 +125,8 @@ public class OwnCardsService extends MeCardsService {
             for(ImageEntity elem : card.images)
                 if(elem.imageURL.equals(request.imageURL)) {
                     card.images.remove(elem);
+                    imageService.delete(elem);
+                    cardsRepo.flush();
                     return true;
                 }
 

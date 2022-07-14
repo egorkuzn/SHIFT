@@ -32,10 +32,8 @@ public class MeOwn {
 
     @PutMapping
     @ApiOperation("New card creation")
-    public ResponseEntity<Boolean> addCard(
-            @RequestPart (value = "imageFile") MultipartFile imageFile,
-            @RequestPart NewCardForm newCard){
-        return ResponseEntity.ok().body(ownCardsService.addNewCard(newCard, imageFile));
+    public ResponseEntity<Boolean> addCard(@RequestBody NewCardForm newCard){
+        return ResponseEntity.ok().body(ownCardsService.addNewCard(newCard));
     }
 
     @PatchMapping
@@ -48,13 +46,17 @@ public class MeOwn {
     @ApiOperation("adding picture")
     public ResponseEntity<Boolean> addingPicture(
             @RequestPart(value = "imageFile") MultipartFile imageFile,
-            @RequestPart FormToAddPictureInCard request){
-        return ResponseEntity.ok().body(ownCardsService.addPictureToCard(imageFile, request));
+            @RequestPart String userID,
+            @RequestPart String cardID){
+        long long_userID = Long.parseLong(userID);
+        long long_cardID = Long.parseLong(cardID);
+
+        return ResponseEntity.ok().body(ownCardsService.addPictureToCard(imageFile, long_userID, long_cardID));
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation("deleting picture")
-    public ResponseEntity<Boolean> deletingPicture(@RequestBody FormToAddPictureInCard request){
+    public ResponseEntity<Boolean> deletingPicture(@RequestBody FormToDeletePictureInCard request){
         return ResponseEntity.ok().body(ownCardsService.deletePictureInCard(request));
     }
 

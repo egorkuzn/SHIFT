@@ -12,10 +12,12 @@ import ru.cft.clorental.repos.model.UserEntity;
 
 @Service
 public class MeSettingsService {
-    UsersRepo usersRepo;
+    private final UsersRepo usersRepo;
+    private final ImageLoaderService imageService;
     @Autowired
-    public MeSettingsService(UsersRepo usersRepo){
+    public MeSettingsService(UsersRepo usersRepo, ImageLoaderService imageService){
         this.usersRepo = usersRepo;
+        this.imageService = imageService;
     }
 
     public String getUserParam(RequestToGetUserParam request) {
@@ -64,12 +66,16 @@ public class MeSettingsService {
     }
 
     public boolean delete(FormForUserDeleting request) {
-        UserEntity user = null;
+        UserEntity user;
 
         if ((user = usersRepo.findFirstByIdAndEmailAndHash(request.id, request.email, SecurityBlock.getHash(request.password))) != null) {
+            if(user.personalIcon != null)
+                imageService.delete(user.personalIcon);
+
             usersRepo.delete(user);
             return true;
-        } else
-            return false;
+        }
+
+        return false;
     }
 }

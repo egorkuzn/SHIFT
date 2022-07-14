@@ -32,6 +32,12 @@ public class ImageLoaderService {
 
         imagesRepo.save(imageEntity);
         imageEntity.imageURL = path + "/" + imageEntity.id + ".jpeg";
+        imagesRepo.flush();
         return imageEntity;
+    }
+
+    public void delete(ImageEntity imageEntity){
+        imagesRepo.delete(imageEntity);
+        imagesRepo.flush();
     }
 }

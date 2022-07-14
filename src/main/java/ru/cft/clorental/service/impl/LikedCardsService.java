@@ -26,6 +26,7 @@ public class LikedCardsService extends MeCardsService {
     }
     public boolean delete(UserIDCardID command) {
         usersRepo.findFirstByIdAndVerified(command.userID, true).liked.remove(cardsRepo.findFirstById(command.cardID));
+        usersRepo.flush();
         return true;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cft.clorental.model.request_forms.CardMessage;
 import ru.cft.clorental.repos.model.CardEntity;
@@ -26,8 +27,8 @@ public class Feed {
 
     @GetMapping
     @ApiOperation("cards getting")
-    public ResponseEntity<List<CardMessage>> getCardsByIdRange(@Param("from") Long from,
-                                                               @Param("to") Long to){
+    public @ResponseBody ResponseEntity<List<CardMessage>> getCardsByIdRange(@Param("from") Long from,
+                                                                             @Param("to") Long to){
         return ResponseEntity.ok(feedService.getFromTo(from, to));
     }
 }

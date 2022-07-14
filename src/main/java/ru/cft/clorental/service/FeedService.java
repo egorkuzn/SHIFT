@@ -22,10 +22,10 @@ public class FeedService {
         this.usersRepo = usersRepo;
     }
     public List<CardMessage> getFromTo(Long from, Long to) {
-        ArrayList<CardMessage> cardEntities = new ArrayList<>();
+        ArrayList<CardMessage> cardMessages = new ArrayList<>();
 
         for(Long i = from; i <= to ; i++) {
-            CardEntity card = null;
+            CardEntity card;
 
             if((card = cardsRepo.findFirstByIdAndRent(i, false)) != null) {
                 UserEntity owner = usersRepo.findFirstByIdAndVerified(card.ownerID, true);
@@ -34,10 +34,10 @@ public class FeedService {
                 if (card.customerId != null)
                     customer = usersRepo.findFirstByIdAndVerified(card.customerId, true);
 
-                cardEntities.add(new CardMessage(card, owner, customer));
+                cardMessages.add(new CardMessage(card, owner, customer));
             }
         }
 
-        return cardEntities;
+        return cardMessages;
     }
 }

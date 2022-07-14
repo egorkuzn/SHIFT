@@ -26,7 +26,7 @@ public class LoginService {
     }
 
     public UserMessage getIdByForm(AuthorisationForm form) {
-        UserEntity user = null;
+        UserEntity user;
 
         if((user = usersRepo.findFirstByHashAndEmailAndVerified(SecurityBlock.getHash(form.password), form.email, true)) != null)
             return new UserMessage(user);
@@ -34,15 +34,15 @@ public class LoginService {
             return null;
     }
 
-    public Long registration(RegistrationForm form, MultipartFile userIcon){
-        UserEntity user = newUser(form, userIcon);
+    public Long registration(RegistrationForm form){
+        UserEntity user = newUser(form);
 
         if(user != null && usersRepo.findAllByEmail(user.email).isEmpty()) {
             usersRepo.save(user);
             String emailCode = Validator.stringRand();
-            emailService.sendMail(user.email, "Регистрация", "Код подтверждения: " + emailCode);
             user.emailCode = emailCode;
             usersRepo.flush();
+            emailService.sendMail(user.email, "Регистрация", "Код подтверждения: " + emailCode);
             return user.id;
         } else
             return null;
@@ -56,7 +56,7 @@ public class LoginService {
         return form.tempID;
     }
 
-    UserEntity newUser(RegistrationForm form, MultipartFile userIcon){
+    UserEntity newUser(RegistrationForm form){
         if(isValidForm(form)) {
             UserEntity user = new UserEntity();
             user.hash = form.password;
@@ -64,7 +64,6 @@ public class LoginService {
             user.name = form.name;
             user.surname = form.surname;
             user.phone = form.phone;
-            user.personalIcon = imageService.generate(userIcon);
             return user;
         }
 
@@ -77,5 +76,10 @@ public class LoginService {
                 Validator.isValidName(form.name) &&
                 Validator.isValidSurname(form.surname) &&
                 Validator.isValidPhone(form.phone);
+    }
+
+    public void iconGetter(MultipartFile personalIcon, String id) {
+        usersRepo.findFirstById(Long.parseLong(id)).personalIcon = imageService.generate(personalIcon);
+        usersRepo.flush();
     }
 }

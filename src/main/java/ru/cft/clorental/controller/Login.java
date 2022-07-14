@@ -12,6 +12,7 @@ import ru.cft.clorental.model.request_forms.RegistrationForm;
 import ru.cft.clorental.model.request_forms.UserMessage;
 import ru.cft.clorental.service.LoginService;
 
+import javax.annotation.processing.SupportedOptions;
 import javax.mail.Multipart;
 
 @RestController
@@ -43,10 +44,15 @@ public class Login {
     @PutMapping
     @ResponseBody
     @ApiOperation("Registration")
-    public ResponseEntity<Long> registration(
-            @RequestPart (value = "userIcon") MultipartFile userIcon,
-            @RequestPart RegistrationForm form){
-        return ResponseEntity.ok().body(loginService.registration(form, userIcon));
+    public ResponseEntity<Long> registration(@RequestBody RegistrationForm form){
+        return ResponseEntity.ok().body(loginService.registration(form));
+    }
+
+    @PutMapping("icon")
+    @ApiOperation("Icon getting")
+    public void iconGetter(@RequestPart MultipartFile personalIcon,
+                                              @RequestPart String id){
+        loginService.iconGetter(personalIcon, id);
     }
 
     @PatchMapping

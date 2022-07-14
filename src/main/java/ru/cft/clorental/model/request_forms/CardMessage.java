@@ -35,19 +35,19 @@ public class CardMessage {
             this.imagesURL.add(elem.imageURL);
     }
 
-    private final Long id;
-    private final List<String> imagesURL;
-    private final String description;
-    private final Double price;
-    private final String ownerName;
-    private final String ownerSurname;
-    private final String ownerPhone;
-    private final Boolean rent;
-    private String customerName;
-    private String customerSurname;
-    private String customerPhone;
-    private final Date term;
-    private final Date startDate;
-    private final Date finishDate;
-    private final String category;
+    public Long id;
+    public List<String> imagesURL;
+    public String description;
+    public Double price;
+    public String ownerName;
+    public String ownerSurname;
+    public String ownerPhone;
+    public Boolean rent;
+    public String customerName;
+    public String customerSurname;
+    public String customerPhone;
+    public Date term;
+    public Date startDate;
+    public Date finishDate;
+    public String category;
 }

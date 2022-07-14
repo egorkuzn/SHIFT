@@ -2,7 +2,6 @@ package ru.cft.clorental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.cft.clorental.model.TranslateToMessage;
 import ru.cft.clorental.model.request_forms.CardMessage;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;

@@ -45,6 +45,3 @@ public class RentCardsService extends MeCardsService {
         return true;
     }
 }
-
-//две галочки
-//дата сдачи
