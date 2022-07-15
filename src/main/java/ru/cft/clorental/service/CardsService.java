@@ -49,10 +49,14 @@ public class CardsService {
         return new CardMessage(card, owner, customer);
     }
 
-    public List<Long> findByCategory(String category) {
-        List<Long> list = new ArrayList<>();
+    public List<CardMessage> findByCategory(String category) {
+        List<CardMessage> list = new ArrayList<>();
+
         cardsRepo.findAllByCategoryAndRent(translator.get(category), false).forEach(
-                cardEntity -> list.add(cardEntity.id)
+                cardEntity -> list.add(new CardMessage(cardEntity,
+                        usersRepo.findFirstById(cardEntity.ownerID),
+                        usersRepo.findFirstById(cardEntity.customerId))
+                )
         );
 
         return list;
