@@ -7,16 +7,21 @@ import ru.cft.clorental.model.Validator;
 import ru.cft.clorental.model.request_forms.FormForUserDeleting;
 import ru.cft.clorental.model.request_forms.RequestToChangeUserParam;
 import ru.cft.clorental.model.request_forms.RequestToGetUserParam;
+import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
+import ru.cft.clorental.repos.model.CardEntity;
+import ru.cft.clorental.repos.model.ImageEntity;
 import ru.cft.clorental.repos.model.UserEntity;
 
 @Service
 public class MeSettingsService {
     private final UsersRepo usersRepo;
+    private final CardsRepo cardsRepo;
     private final ImageLoaderService imageService;
     @Autowired
-    public MeSettingsService(UsersRepo usersRepo, ImageLoaderService imageService){
+    public MeSettingsService(UsersRepo usersRepo, CardsRepo cardsRepo, ImageLoaderService imageService){
         this.usersRepo = usersRepo;
+        this.cardsRepo = cardsRepo;
         this.imageService = imageService;
     }
 
@@ -69,6 +74,9 @@ public class MeSettingsService {
         UserEntity user;
 
         if ((user = usersRepo.findFirstByIdAndEmailAndHash(request.id, request.email, SecurityBlock.getHash(request.password))) != null) {
+            if(!clearOwnCards(user))
+                return false;
+
             if(user.personalIcon != null)
                 imageService.delete(user.personalIcon);
 
@@ -77,5 +85,29 @@ public class MeSettingsService {
         }
 
         return false;
+    }
+
+    private boolean clearOwnCards(UserEntity user) {
+        for(CardEntity elem: user.rent)
+            if(elem.rent)
+                return false;
+
+        for(CardEntity elem: user.own)
+            if(elem.rent)
+                return false;
+
+        for(CardEntity elem: user.own){
+            user.own.remove(elem);
+
+            for(ImageEntity image: elem.images) {
+                elem.images.remove(image);
+                imageService.delete(image);
+            }
+
+            cardsRepo.delete(elem);
+            cardsRepo.flush();
+        }
+
+        return true;
     }
 }

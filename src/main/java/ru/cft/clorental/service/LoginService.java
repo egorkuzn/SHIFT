@@ -37,7 +37,7 @@ public class LoginService {
     public Long registration(RegistrationForm form){
         UserEntity user = newUser(form);
 
-        if(user != null && usersRepo.findAllByEmail(user.email).isEmpty()) {
+        if(user != null && usersRepo.findAllByEmailAndVerified(user.email, true).isEmpty()) {
             usersRepo.save(user);
             String emailCode = Validator.stringRand();
             user.emailCode = emailCode;
@@ -55,11 +55,11 @@ public class LoginService {
 
         return form.tempID;
     }
-
+//shedule
     UserEntity newUser(RegistrationForm form){
         if(isValidForm(form)) {
             UserEntity user = new UserEntity();
-            user.hash = form.password;
+            user.hash = SecurityBlock.getHash(form.password);
             user.email = form.email;
             user.name = form.name;
             user.surname = form.surname;

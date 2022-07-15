@@ -11,4 +11,5 @@ public class NewCardForm {
     public Double price;
     public Date term;
     public String category;
+    public String title;
 }

@@ -3,6 +3,7 @@ package ru.cft.clorental.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.cft.clorental.model.Validator;
 import ru.cft.clorental.model.request_forms.*;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
@@ -28,7 +29,7 @@ public class OwnCardsService extends MeCardsService {
     public boolean delete(UserIDCardID command) {
         usersRepo.findFirstByIdAndVerified(command.userID, true).own.remove(cardsRepo.findFirstById(command.cardID));
         CardEntity card = cardsRepo.findFirstById(command.cardID);
-        if(!card.markFromCustomer) {
+        if((card.markFromCustomer == null) || !card.markFromCustomer) {
             card.rent = false;
             card.markFromOwner = false;
 
@@ -71,6 +72,7 @@ public class OwnCardsService extends MeCardsService {
                 case "customerID" -> card.customerId = Long.parseLong(command.onWhat);
                 case "ownerID" -> card.ownerID = Long.parseLong(command.onWhat);
                 case "description" -> card.description = command.onWhat;
+                case "title" -> card.title = command.onWhat;
                 default -> {return false;}
             }
 
@@ -80,28 +82,36 @@ public class OwnCardsService extends MeCardsService {
         return false;
     }
 
-    public boolean addNewCard(NewCardForm form){
+    public Long addNewCard(NewCardForm form){
         UserEntity user = usersRepo.findFirstByIdAndVerified(form.userID, true);
 
         if(user.own.size() == user.maxOwnCount)
-            return false;
+            return null;
 
         CardEntity card = generatedNewCard(form);
+
+        if(card == null)
+            return null;
+
         cardsRepo.save(card);
         cardsRepo.flush();
         user.own.add(card);
         usersRepo.flush();
-        return true;
+        return card.id;
     }
 
     protected CardEntity generatedNewCard(NewCardForm form) {
         CardEntity cardEntity = new CardEntity();
+
+        if(!Validator.newCardFormValid(form))
+            return null;
 
         cardEntity.ownerID = form.userID;
         cardEntity.category = form.category;
         cardEntity.description = form.description;
         cardEntity.price = form.price;
         cardEntity.term = form.term;
+        cardEntity.title = form.title;
         cardEntity.rent = false;
         return cardEntity;
     }

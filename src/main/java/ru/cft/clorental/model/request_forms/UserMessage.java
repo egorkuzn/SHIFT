@@ -16,6 +16,8 @@ public class UserMessage {
         this.surname = user.surname;
         this.name = user.name;
         this.phone = user.phone;
-        this.userIconURL = user.personalIcon.imageURL;
+
+        if(user.personalIcon != null)
+            this.userIconURL = user.personalIcon.imageURL;
     }
 }

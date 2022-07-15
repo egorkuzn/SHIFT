@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service("emailService")
 public class EmailService{
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     /**
      * This method will send compose and send the message

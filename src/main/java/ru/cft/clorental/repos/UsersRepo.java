@@ -13,7 +13,7 @@ public interface UsersRepo extends JpaRepository<UserEntity, Long> {
     UserEntity findFirstById(Long id);
     UserEntity findFirstByIdAndEmailCode(Long id, String emailCode);
     UserEntity findFirstByIdAndEmailAndHash(Long id, String email, String hash);
-    List<UserEntity> findAllByEmail(String email);
+    List<UserEntity> findAllByEmailAndVerified(String email, boolean isVerified);
 
     @Override
     <S extends UserEntity> S save(S s);

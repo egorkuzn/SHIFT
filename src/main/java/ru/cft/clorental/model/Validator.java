@@ -1,4 +1,6 @@
 package ru.cft.clorental.model;
+import ru.cft.clorental.model.request_forms.NewCardForm;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -54,5 +56,15 @@ public class Validator {
     private static void genList() {
         for(char i = '!'; i <'z'; i++)
             list.add(i);
+    }
+
+    public static boolean newCardFormValid(NewCardForm form) {
+//        return isValidID(form.userID) &&
+//        isValidCategory(form.category) &&
+//        isValidDescription(form.description) &&
+//        form.price;
+//        form.term;
+//        form.title;
+        return true;
     }
 }

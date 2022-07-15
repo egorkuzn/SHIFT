@@ -32,7 +32,7 @@ public class MeOwn {
 
     @PutMapping
     @ApiOperation("New card creation")
-    public ResponseEntity<Boolean> addCard(@RequestBody NewCardForm newCard){
+    public ResponseEntity<Long> addCard(@RequestBody NewCardForm newCard){
         return ResponseEntity.ok().body(ownCardsService.addNewCard(newCard));
     }
 

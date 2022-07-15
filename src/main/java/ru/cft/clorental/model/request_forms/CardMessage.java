@@ -12,6 +12,7 @@ import java.util.List;
 public class CardMessage {
     public CardMessage(CardEntity firstById, UserEntity owner, UserEntity customer){
         this.id = firstById.id;
+        this.title = firstById.title;
         this.description = firstById.description;
         this.price = firstById.price;
         this.ownerName = owner.name;
@@ -36,6 +37,7 @@ public class CardMessage {
     }
 
     public Long id;
+    public String title;
     public List<String> imagesURL;
     public String description;
     public Double price;

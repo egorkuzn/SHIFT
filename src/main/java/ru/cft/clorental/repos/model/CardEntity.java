@@ -45,4 +45,6 @@ public class CardEntity{
     @Column(name = "category")
 
     public String category;
+    @Column(name = "title")
+    public String title;
 }
