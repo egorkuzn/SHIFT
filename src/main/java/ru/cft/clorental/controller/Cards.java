@@ -30,7 +30,7 @@ public class Cards {
     }
 
     @ApiOperation("Taking all cards")
-    @GetMapping
+    @GetMapping("all")
     public @ResponseBody ResponseEntity<List<CardMessage>> absolute(){
         return ResponseEntity.ok().body(cardsService.showAll());
     }
