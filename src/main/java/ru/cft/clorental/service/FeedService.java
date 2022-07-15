@@ -28,6 +28,9 @@ public class FeedService {
             CardEntity card;
 
             if((card = cardsRepo.findFirstByIdAndRent(i, false)) != null) {
+                if(card.category.equals("xxx"))
+                    continue;
+
                 UserEntity owner = usersRepo.findFirstByIdAndVerified(card.ownerID, true);
                 UserEntity customer = null;
 
