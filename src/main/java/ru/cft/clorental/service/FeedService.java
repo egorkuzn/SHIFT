@@ -28,7 +28,7 @@ public class FeedService {
             CardEntity card;
 
             if((card = cardsRepo.findFirstByIdAndRent(i, false)) != null) {
-                if(card.category.equals("xxx"))
+                if(card.category.equals("18+"))
                     continue;
 
                 UserEntity owner = usersRepo.findFirstByIdAndVerified(card.ownerID, true);

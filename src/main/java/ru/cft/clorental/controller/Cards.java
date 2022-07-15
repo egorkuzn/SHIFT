@@ -31,7 +31,7 @@ public class Cards {
 
     @ApiOperation("Taking cards IDs by category")
     @GetMapping("{category}")
-    public ResponseEntity<List<Long>> getCardsByCategory(@PathVariable String category){
+    public ResponseEntity<List<CardMessage>> getCardsByCategory(@PathVariable String category){
         return ResponseEntity.ok().body(cardsService.findByCategory(category));
     }
 }
