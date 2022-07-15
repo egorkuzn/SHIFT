@@ -2,6 +2,7 @@ package ru.cft.clorental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.cft.clorental.model.Translator;
 import ru.cft.clorental.model.request_forms.CardMessage;
 import ru.cft.clorental.repos.CardsRepo;
 import ru.cft.clorental.repos.UsersRepo;
@@ -22,19 +23,6 @@ public class CardsService {
     CardsService(CardsRepo cardsRepo, UsersRepo usersRepo){
         this.cardsRepo = cardsRepo;
         this.usersRepo = usersRepo;
-        translatorInitializer();
-    }
-
-    private void translatorInitializer() {
-        translator.put("appliances", "Бытовая техника");
-        translator.put("recreation", "Отдых");
-        translator.put("home", "Всё для дома");
-        translator.put("clothes", "Одежда");
-        translator.put("sport", "Спорт");
-        translator.put("hobby", "Отдых и хобби");
-        translator.put("things", "Личные вещи");
-        translator.put("xxx", "18+");
-        translator.put("dacha", "Для дома и дачи");
     }
 
     public CardMessage findById(Long id){
@@ -52,7 +40,7 @@ public class CardsService {
     public List<CardMessage> findByCategory(String category) {
         List<CardMessage> list = new ArrayList<>();
 
-        cardsRepo.findAllByCategoryAndRent(translator.get(category), false).forEach(
+        cardsRepo.findAllByCategoryAndRent(Translator.get(category), false).forEach(
                 cardEntity -> list.add(new CardMessage(cardEntity,
                         usersRepo.findFirstById(cardEntity.ownerID),
                         usersRepo.findFirstById(cardEntity.customerId))
@@ -60,5 +48,16 @@ public class CardsService {
         );
 
         return list;
+    }
+
+    public List<CardMessage> showAll() {
+        ArrayList<CardMessage> cardMessages = new ArrayList<>();
+        List<CardEntity> cardEntities = cardsRepo.findAllByRent(false);
+
+        cardEntities.forEach(elem -> cardMessages.add(new CardMessage(elem,
+                usersRepo.findFirstById(elem.ownerID),
+                usersRepo.findFirstById(elem.customerId))));
+
+        return cardMessages;
     }
 }

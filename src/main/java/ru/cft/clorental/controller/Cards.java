@@ -29,6 +29,12 @@ public class Cards {
         return ResponseEntity.ok().body(cardsService.findById(id));
     }
 
+    @ApiOperation("Taking all cards")
+    @GetMapping
+    public @ResponseBody ResponseEntity<List<CardMessage>> absolute(){
+        return ResponseEntity.ok().body(cardsService.showAll());
+    }
+
     @ApiOperation("Taking cards IDs by category")
     @GetMapping("{category}")
     public ResponseEntity<List<CardMessage>> getCardsByCategory(@PathVariable String category){

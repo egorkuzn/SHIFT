@@ -14,6 +14,7 @@ public interface CardsRepo extends JpaRepository<CardEntity, Long> {
     CardEntity findFirstByIdAndRent(Long id, boolean isRent);
     CardEntity findFirstByIdAndRentAndOwnerID(Long cardID, boolean rentStatus, Long ownerID);
     List<CardEntity> findAllByCategoryAndRent(String category, boolean isRent);
+    List<CardEntity> findAllByRent(boolean isRent);
     void deleteById(Long id);
 
     @Override
